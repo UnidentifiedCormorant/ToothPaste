@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AuthRequest;
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -17,13 +19,13 @@ class AuthController extends Controller
         return view ('auth.register');
     }
 
-    public function auth()
+    public function auth(AuthRequest $request)
     {
-        dd('lullen');
+        dd($request->all());
     }
 
-    public function newUser()
+    public function newUser(RegisterRequest $request)
     {
-        dd('new lullen');
+        dd($request->all());
     }
 }
