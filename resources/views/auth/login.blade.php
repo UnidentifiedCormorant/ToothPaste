@@ -4,8 +4,8 @@
 <h2>Авторизация</h2>
 <form action="{{route('auth')}}" method="post">
     @csrf
-    <label for="login">Логин</label>
-    <input name="login" type="text">
+    <label for="email">Логин</label>
+    <input name="email" type="text">
     <br>
     <label for="password">Пароль</label>
     <input name="password" type="password">
@@ -13,7 +13,7 @@
     <button type="submit">Войти</button>
 </form>
 
-@error('login')
+@error('email')
 {{$message}}
 @enderror
 @error('password')

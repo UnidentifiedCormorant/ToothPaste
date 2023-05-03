@@ -5,8 +5,11 @@
 
     <form action="{{route('newUser')}}" method="post">
         @csrf
-        <label for="login">Логин</label>
-        <input name="login" type="text">
+        <label for="name">Имя</label>
+        <input name="name" type="text">
+
+        <label for="email">Логин</label>
+        <input name="email" type="text">
 
         <br>
         <label for="password">Пароль</label>
@@ -18,7 +21,7 @@
         <button type="submit">Войти</button>
 
     </form>
-    @error('login')
+    @error('email')
     {{$message}}
     @enderror
     @error('password')
