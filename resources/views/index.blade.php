@@ -7,6 +7,7 @@
 
 @auth()
 Ну здарова {{auth()->user()->name}}
+<a href="{{route('logout')}}">Выйти</a>
 @endauth
 
 @endsection

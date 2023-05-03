@@ -14,7 +14,7 @@ class AuthController extends Controller
     /**
      * @return View
      */
-    public function login()
+    public function login() : View
     {
         return view('auth.login');
     }
@@ -22,7 +22,7 @@ class AuthController extends Controller
     /**
      * @return View
      */
-    public function register()
+    public function register() : View
     {
         return view ('auth.register');
     }
@@ -31,7 +31,7 @@ class AuthController extends Controller
      * @param AuthRequest $request
      * @return View|\Exception
      */
-    public function auth(AuthRequest $request)
+    public function auth(AuthRequest $request) : View|\Exception
     {
         $data = $request->validated();
 
@@ -49,12 +49,22 @@ class AuthController extends Controller
      * @param RegisterRequest $request
      * @return View
      */
-    public function newUser(RegisterRequest $request)
+    public function newUser(RegisterRequest $request) : View
     {
         $data = $request->validated();
 
         $user = User::firstOrCreate($data);
         \Auth::login($user);
+
+        return view('index');
+    }
+
+    /**
+     * @return View
+     */
+    public function logout() : View
+    {
+        \Auth::logout();
 
         return view('index');
     }
