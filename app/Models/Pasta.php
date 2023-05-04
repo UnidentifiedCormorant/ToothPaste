@@ -24,6 +24,9 @@ class Pasta extends Model
     protected $fillable = [
         'title',
         'content',
-        'expirationTime'
+        'expirationTime',
+        'hash',
+        'user_id',
+        'access_type_id',
     ];
 }

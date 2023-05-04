@@ -4,7 +4,7 @@
     <h3>Это главная страница</h3>
 
     <p>СОЗДАТЬ ПАСТУ</p>
-    <form action="{{route('pastas.store')}}">
+    <form action="{{route('pastas.store')}}" method="post">
         @csrf
         <label for="title">Название</label>
         <input name="title" type="text">
