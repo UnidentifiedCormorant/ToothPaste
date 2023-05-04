@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IndexController;
+use App\Http\Controllers\PastaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,3 +23,8 @@ Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::post('auth', [AuthController::class, 'auth'])->name('auth');
 Route::post('newUser', [AuthController::class, 'newUser'])->name('newUser');
+
+Route::name('pastas.')->group( function (){
+    Route::get('/show/{hash}', [PastaController::class, 'show'])->name('show');
+    Route::post('/', [PastaController::class, 'store'])->name('store');
+});
