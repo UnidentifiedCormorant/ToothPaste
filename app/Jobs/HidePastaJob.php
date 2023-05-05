@@ -25,7 +25,7 @@ class HidePastaJob implements ShouldQueue
     }
 
     /**
-     * Execute the job.
+     * Осуществляет мягкое удаление пасты
      */
     public function handle(): void
     {

@@ -33,4 +33,8 @@
         <button type="submit">Добавить</button>
     </form>
 
+    @isset($url)
+        Паста загружена! Вот ссылка на неё: {{$url}}
+    @endisset
+
 @endsection

@@ -13,29 +13,28 @@
 
 <h2>Последние пасты</h2>
 @foreach($lastPastas as $lPasta)
-    <a href="#">{{$lPasta->title}}</a>
+    <a href="{{route('pastas.show', $lPasta->hash)}}">{{$lPasta->title}}</a>
 @endforeach
 <br>
 @auth()
     <h2>МОИ последние пасты</h2>
     @foreach($myPastas as $pasta)
-        <a href="#">{{$pasta->title}}</a>
+        <a href="{{route('pastas.show', $pasta->hash)}}">{{$pasta->title}}</a>
     @endforeach
 <br>
 <a href="#">МОИ ПАСТЫ</a>
 @endauth
 <br>
-
 @if(!\Illuminate\Support\Facades\Auth::check())
 <a href="{{route('login')}}">Войти</a>
 <a href="{{route('register')}}">Зарегестрироватсья</a>
 @endif
-
+<br>
 @auth()
     Ну здарова {{auth()->user()->name}}
     <a href="{{route('logout')}}">Выйти</a>
 @endauth
-
+<br>
 @yield('content')
 
 </body>

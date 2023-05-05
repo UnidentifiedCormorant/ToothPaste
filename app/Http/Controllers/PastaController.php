@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -23,7 +24,9 @@ class PastaController extends Controller
      */
     public function show($hash): View
     {
-        dd('show lullen');
+        $pasta = Pasta::where('hash', $hash)->first();
+
+        return view('pastas.show', compact('pasta'));
     }
 
     /**
@@ -31,6 +34,7 @@ class PastaController extends Controller
      *
      * @param PastaRequest $request
      * @return RedirectResponse
+     * @return string $url: упаковывает ссылку на созданную пасту
      */
     public function store(PastaRequest $request): RedirectResponse
     {
@@ -41,13 +45,14 @@ class PastaController extends Controller
             $data['user_id'] = auth()->user()->id;
         }
 
-        $data['hash'] = Hash::make(Str::random(3));
+        $data['hash'] = substr(md5(time()), 0, 16);
 
         $pasta = Pasta::create($data);
 
         if ($data['expirationTime'] != null)
         {
-            HidePastaJob::dispatch($pasta->id)->delay(now()->addMinute());
+            //$url = URL::temporarySignedRoute('pastas.show', now()->addMinutes($data['expirationTime']), ['id' => $pasta]);
+            HidePastaJob::dispatch($pasta->id)->delay(now()->addMinutes($data['expirationTime']));
         }
 
         return redirect()->route('index');
