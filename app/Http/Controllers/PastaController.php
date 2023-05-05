@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PastaRequest;
+use App\Jobs\HidePastaJob;
 use App\Models\Pasta;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class PastaController extends Controller
      * @param $hash
      * @return View
      */
-    public function show($hash) : View
+    public function show($hash): View
     {
         dd('show lullen');
     }
@@ -31,18 +32,23 @@ class PastaController extends Controller
      * @param PastaRequest $request
      * @return RedirectResponse
      */
-    public function store(PastaRequest $request) : RedirectResponse
+    public function store(PastaRequest $request): RedirectResponse
     {
         $data = $request->validated();
 
-        if(\Auth::check())
+        if (\Auth::check())
         {
             $data['user_id'] = auth()->user()->id;
         }
 
         $data['hash'] = Hash::make(Str::random(3));
 
-        Pasta::create($data);
+        $pasta = Pasta::create($data);
+
+        if ($data['expirationTime'] != null)
+        {
+            HidePastaJob::dispatch($pasta->id)->delay(now()->addMinute());
+        }
 
         return redirect()->route('index');
     }
