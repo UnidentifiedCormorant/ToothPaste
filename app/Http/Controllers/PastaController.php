@@ -23,9 +23,11 @@ class PastaController extends Controller
      * @param string $hash
      * @return View
      */
-    public function show(string $hash): View
+    public function show(string $hash) : View
     {
         $pasta = Pasta::where('hash', $hash)->first();
+
+        $pasta->privateCheck();
 
         return view('pastas.show', compact('pasta'));
     }
@@ -37,7 +39,7 @@ class PastaController extends Controller
      */
     public function myPastas()
     {
-        if(Auth::check())
+        if (Auth::check())
         {
             $pastas = Auth::user()->pastas;
             return view('pastas.myPastas', compact('pastas'));
@@ -55,7 +57,7 @@ class PastaController extends Controller
      * @return RedirectResponse
      * @return string $url: упаковывает ссылку на созданную пасту
      */
-    public function store(PastaRequest $request): RedirectResponse
+    public function store(PastaRequest $request) : RedirectResponse
     {
         $data = $request->validated();
 

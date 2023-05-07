@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * App\Models\Pasta
@@ -30,14 +32,53 @@ class Pasta extends Model
         'access_type_id',
     ];
 
-
     /**
      * Возвращает тип досутпа пасты
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function accessType()
+    public function accessType() : BelongsTo
     {
         return $this->belongsTo(AccessType::class);
+    }
+
+    /**
+     * Проверяет, является ли паста доступной только автору
+     *
+     * @return \Illuminate\Foundation\Application|void
+     */
+    public function privateCheck() : void
+    {
+        if($this->isPrivate())
+        {
+            if(!Auth::check())
+            {
+                abort(403);
+            }
+            elseif(!$this->isMine())
+            {
+                abort(403);
+            }
+        }
+    }
+
+    /**
+     * Проверяет, является ли паста приватной
+     *
+     * @return bool
+     */
+    private function isPrivate() : bool
+    {
+        return $this->access_type_id == 3;
+    }
+
+    /**
+     * Проверяет, принадлежит ли паста авторизованному пользователю
+     *
+     * @return bool
+     */
+    private function isMine() : bool
+    {
+        return $this->user_id == Auth::user()->id;
     }
 }

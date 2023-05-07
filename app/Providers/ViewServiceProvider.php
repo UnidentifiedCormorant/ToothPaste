@@ -27,10 +27,13 @@ class ViewServiceProvider extends ServiceProvider
             $myPastas = null;
             if (\Auth::check())
             {
-                $myPastas = Pasta::where('user_id', auth()->user()->id)->latest()->take(10)->get();
+                $myPastas = Pasta::where([
+                    ['user_id', auth()->user()->id],
+                    ['access_type_id', 1]
+                ])->latest()->take(10)->get();
             }
 
-            $lastPastas = Pasta::latest()->take(10)->get();
+            $lastPastas = Pasta::where('access_type_id', 1)->latest()->take(10)->get();
 
             $accessTypes = AccessType::all();
 
