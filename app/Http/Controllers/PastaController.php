@@ -8,6 +8,7 @@ use App\Jobs\HidePastaJob;
 use App\Models\Pasta;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
@@ -19,14 +20,32 @@ class PastaController extends Controller
     /**
      * Возвращает пасту по хэшу
      *
-     * @param $hash
+     * @param string $hash
      * @return View
      */
-    public function show($hash): View
+    public function show(string $hash): View
     {
         $pasta = Pasta::where('hash', $hash)->first();
 
         return view('pastas.show', compact('pasta'));
+    }
+
+    /**
+     * Возвращает все пасты авторизованного пользователя
+     *
+     * @return View|\Illuminate\Foundation\Application|void
+     */
+    public function myPastas()
+    {
+        if(Auth::check())
+        {
+            $pastas = Auth::user()->pastas;
+            return view('pastas.myPastas', compact('pastas'));
+        }
+        else
+        {
+            abort(403);
+        }
     }
 
     /**
@@ -40,7 +59,7 @@ class PastaController extends Controller
     {
         $data = $request->validated();
 
-        if (\Auth::check())
+        if (Auth::check())
         {
             $data['user_id'] = auth()->user()->id;
         }
@@ -55,6 +74,6 @@ class PastaController extends Controller
             HidePastaJob::dispatch($pasta->id)->delay(now()->addMinutes($data['expirationTime']));
         }
 
-        return redirect()->route('index');
+        return redirect()->route('pastas.show', $pasta->hash);
     }
 }

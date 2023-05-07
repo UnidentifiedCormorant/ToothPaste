@@ -21,13 +21,13 @@
     @foreach($myPastas as $pasta)
         <a href="{{route('pastas.show', $pasta->hash)}}">{{$pasta->title}}</a>
     @endforeach
-<br>
-<a href="#">МОИ ПАСТЫ</a>
+    <br>
+    <a href="{{route('pastas.myPastas')}}">МОИ ПАСТЫ</a>
 @endauth
 <br>
 @if(!\Illuminate\Support\Facades\Auth::check())
-<a href="{{route('login')}}">Войти</a>
-<a href="{{route('register')}}">Зарегестрироватсья</a>
+    <a href="{{route('login')}}">Войти</a>
+    <a href="{{route('register')}}">Зарегестрироватсья</a>
 @endif
 <br>
 @auth()

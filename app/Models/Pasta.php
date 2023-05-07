@@ -29,4 +29,15 @@ class Pasta extends Model
         'user_id',
         'access_type_id',
     ];
+
+
+    /**
+     * Возвращает тип досутпа пасты
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function accessType()
+    {
+        return $this->belongsTo(AccessType::class);
+    }
 }

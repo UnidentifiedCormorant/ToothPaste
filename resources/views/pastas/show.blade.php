@@ -8,7 +8,7 @@
     <a href="#">ПОЖАЛОВАЦА</a>
 
     <p>Быстрая ссылка:</p>
-    <p>http://127.0.0.1:8000/{{$pasta->hash}}</p>
+    <p>{{route('pastas.show', $pasta->hash)}}</p>
     <br>
     <br>
     <a href="{{URL::previous()}}">Назад</a>
