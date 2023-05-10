@@ -207,6 +207,11 @@ class UserEditScreen extends Screen
         return redirect()->route('platform.systems.users');
     }
 
+    public function changePermission(User $user)
+    {
+        dd('admin lullen');
+    }
+
     /**
      * @param User $user
      *

@@ -16,7 +16,6 @@ return new class extends Migration
 
             $table->string('title');
             $table->longText('content');
-            $table->integer('expirationTime')->nullable()->default(null);
             $table->string('hash');
 
             $table->unsignedBigInteger('user_id')->nullable()->default(null);

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Orchid\Screen\AsSource;
 
 /**
  * App\Models\Pasta
@@ -43,7 +44,7 @@ use Illuminate\Support\Facades\Auth;
  */
 class Pasta extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, AsSource;
 
     protected $fillable = [
         'title',
@@ -62,6 +63,16 @@ class Pasta extends Model
     public function accessType() : BelongsTo
     {
         return $this->belongsTo(AccessType::class);
+    }
+
+    /**
+     * Возвращает пользователя, создавшего пасту
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user() : BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     /**
