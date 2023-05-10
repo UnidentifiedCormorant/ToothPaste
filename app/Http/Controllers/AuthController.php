@@ -8,6 +8,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class AuthController extends Controller
@@ -47,7 +48,7 @@ class AuthController extends Controller
             ['password', $data['password']]
         ])->firstOrFail();
 
-        \Auth::login($user);
+        Auth::login($user);
 
         return redirect()->route('index');
     }
@@ -63,7 +64,7 @@ class AuthController extends Controller
         $data = $request->validated();
 
         $user = User::firstOrCreate($data);
-        \Auth::login($user);
+        Auth::login($user);
 
         return redirect()->route('index');
     }
@@ -75,7 +76,7 @@ class AuthController extends Controller
      */
     public function logout() : RedirectResponse
     {
-        \Auth::logout();
+        Auth::logout();
 
         return redirect()->route('index');
     }

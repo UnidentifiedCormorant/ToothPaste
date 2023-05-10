@@ -17,6 +17,28 @@ use Illuminate\Support\Facades\Auth;
  * @method static \Illuminate\Database\Eloquent\Builder|Pasta query()
  * @method static \Illuminate\Database\Eloquent\Builder|Pasta withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Pasta withoutTrashed()
+ * @property int $id
+ * @property string $title
+ * @property string $content
+ * @property int|null $expirationTime
+ * @property string $hash
+ * @property int|null $user_id
+ * @property int $access_type_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Models\AccessType|null $accessType
+ * @method static \Database\Factories\PastaFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Pasta whereAccessTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pasta whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pasta whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pasta whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pasta whereExpirationTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pasta whereHash($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pasta whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pasta whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pasta whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pasta whereUserId($value)
  * @mixin \Eloquent
  */
 class Pasta extends Model
