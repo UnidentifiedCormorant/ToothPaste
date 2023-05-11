@@ -63,4 +63,17 @@ class User extends Authenticatable
         'updated_at',
         'created_at',
     ];
+
+    /**
+     * Проверяет, не забанен ли пользова
+     *
+     * @return void
+     */
+    public function checkBan()
+    {
+        if($this->banned == 1)
+        {
+            dd('Сори, вы забанены');
+        }
+    }
 }

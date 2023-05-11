@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use App\Models\Pasta;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,11 +19,7 @@ class DatabaseSeeder extends Seeder
 
         User::factory(10)->create();
 
-        User::create([
-            'name' => 'Lullen Lullenium',
-            'email' => '123',
-            'password' => '123'
-        ]);
+        Artisan::call('orchid:admin Lullen_Lullenium admin@admin.com 123');
 
         Pasta::factory(50)->create();
     }

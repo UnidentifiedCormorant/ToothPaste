@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
 /**
@@ -44,7 +45,7 @@ use Orchid\Screen\AsSource;
  */
 class Pasta extends Model
 {
-    use HasFactory, SoftDeletes, AsSource;
+    use HasFactory, SoftDeletes, AsSource, Filterable;
 
     protected $fillable = [
         'title',
@@ -53,6 +54,14 @@ class Pasta extends Model
         'hash',
         'user_id',
         'access_type_id',
+    ];
+
+    protected $allowedSorts = [
+        'title'
+    ];
+
+    protected $allowedFilters = [
+        'title'
     ];
 
     /**

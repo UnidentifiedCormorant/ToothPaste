@@ -3,6 +3,8 @@
 namespace App\Orchid\Screens;
 
 use App\Models\Pasta;
+use Orchid\Platform\Models\User;
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 use Orchid\Screen\TD;
 use Orchid\Support\Facades\Layout;
@@ -17,7 +19,7 @@ class PastasListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'pastas' => Pasta::withTrashed()->paginate(10)
+            'pastas' => Pasta::filters()->withTrashed()->paginate(30)
         ];
     }
 
@@ -52,7 +54,7 @@ class PastasListScreen extends Screen
     {
         return [
             Layout::table('pastas', [
-                TD::make('title', 'Название'),
+                TD::make('title', 'Название')->sort()->filter(TD::FILTER_TEXT),
                 TD::make('content', 'Содержимое')->width(300)->defaultHidden(),
                 TD::make('user_id', 'Автор')->render(function (Pasta $pasta){
                     return $pasta->user === null ? 'Аноном' :  $pasta->user->name;
@@ -62,8 +64,24 @@ class PastasListScreen extends Screen
                 }),
                 TD::make('deleted_at', 'Срок годности')->render(function (Pasta $pasta){
                      return $pasta->deleted_at === null ? 'Существует' : 'Истёк';
-                })
+                }),
+                TD::make(__('Действия'))
+                    ->align(TD::ALIGN_CENTER)
+                    ->width('100px')
+                    ->render(fn(Pasta $pasta) => Button::make(__('Удалить'))
+                        ->icon('trash')
+                        ->confirm(__('Вы уверены, что хотите окончательно удалить пасту?'))
+                        ->method('delete', [
+                            'id' => $pasta->id,
+                        ])
+                    ),
             ])
         ];
+    }
+
+    public function delete(string $id)
+    {
+        $pasta = Pasta::withTrashed()->find($id);
+        $pasta->forceDelete();
     }
 }

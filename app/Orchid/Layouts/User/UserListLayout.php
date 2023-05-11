@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Orchid\Layouts\User;
 
+use Orchid\Icons\IconComponent;
 use Orchid\Platform\Models\User;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Actions\Menu;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Persona;
@@ -49,28 +51,36 @@ class UserListLayout extends Table
                 ->sort()
                 ->render(fn(User $user) => $user->updated_at->toDateTimeString()),
 
-            TD::make(__('Permissions'))
+            TD::make(__('Состояние'))
                 ->align(TD::ALIGN_CENTER)
                 ->width('100px')
-                ->render(fn(User $user) => Button::make(__('Забанить'))
-                    ->icon('ban')
-                    ->confirm(__('Забаненный пользователь не сможет авторизоваться на сайте, и, соответственно, не сможет публиковать пасты от своего имени. Вы уверены, что хотите забанить этого пользователя?'))
-                    ->method('changePermission', [
-                        'id' => $user->id
-                    ])),
+                ->render(function (User $user)
+                {
+                    if ($user->banned == 1)
+                    {
+                        return Link::make(__('Разбанить'))
+                            ->icon('control-play')
+                            ->href(route('changeBan', $user->id));
+                    } else
+                    {
+                        return Link::make(__('Забанить'))
+                            ->icon('ban')
+                            ->href(route('changeBan', $user->id));
+                    }
+                }),
 
-            TD::make(__('Actions'))
+            TD::make(__(''))
                 ->align(TD::ALIGN_CENTER)
                 ->width('100px')
-                ->render(fn(User $user) => Button::make(__('Delete'))
+                ->render(fn (User $user) => Button::make(__('Delete'))
                     ->icon('trash')
                     ->confirm(__('Once the account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.'))
                     ->method('remove', [
                         'id' => $user->id,
                     ])
-                ),
-
-
+                )
         ];
     }
+
+
 }
