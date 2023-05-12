@@ -41,7 +41,7 @@ class PastaController extends Controller
     {
         if (Auth::check())
         {
-            $pastas = Auth::user()->pastas;
+            $pastas = Auth::user()->pastas()->paginate(10);
             return view('pastas.myPastas', compact('pastas'));
         }
         else

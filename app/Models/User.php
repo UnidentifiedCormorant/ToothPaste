@@ -76,4 +76,14 @@ class User extends Authenticatable
             dd('Сори, вы забанены');
         }
     }
+
+    /**
+     * Возвращает пасты, которые создал пользователь
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function pastas()
+    {
+        return $this->hasMany(Pasta::class);
+    }
 }

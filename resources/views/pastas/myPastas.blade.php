@@ -18,4 +18,6 @@
     <br>
     <a href="{{route('index')}}">Назад</a>
 
+    {{ $pastas->links() }}
+
 @endsection
