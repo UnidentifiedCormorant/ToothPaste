@@ -79,6 +79,12 @@ class PastasListScreen extends Screen
         ];
     }
 
+    /**
+     * Полностью удаляет пасту из базы
+     *
+     * @param string $id
+     * @return void
+     */
     public function delete(string $id)
     {
         $pasta = Pasta::withTrashed()->find($id);

@@ -10,7 +10,7 @@
         <input name="title" type="text">
 
         <label for="content">Содержание</label>
-        <input name="content" type="text">
+        <textarea name="content" type="text"></textarea>
 
         <label for="expirationTime">Время существования</label>
         <select name="expirationTime">
@@ -32,9 +32,5 @@
 
         <button type="submit">Добавить</button>
     </form>
-
-    @isset($url)
-        Паста загружена! Вот ссылка на неё: {{$url}}
-    @endisset
 
 @endsection

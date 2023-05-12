@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Complaint;
 use App\Models\Pasta;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -18,9 +19,11 @@ class DatabaseSeeder extends Seeder
         $this->call(AccessTypesSeeder::class);
 
         User::factory(10)->create();
-
         Artisan::call('orchid:admin Lullen_Lullenium admin@admin.com 123');
 
         Pasta::factory(50)->create();
+        Pasta::factory(50)->create(['user_id' => 11]);
+
+        Complaint::factory(10)->create();
     }
 }

@@ -5,7 +5,7 @@
 
     <p>{{$pasta->content}}</p>
 
-    <a href="#">ПОЖАЛОВАЦА</a>
+    <a href="{{route('complaints.create', $pasta->id)}}}">ПОЖАЛОВАЦА</a>
 
     <p>Быстрая ссылка:</p>
     <p>{{route('pastas.show', $pasta->hash)}}</p>

@@ -33,6 +33,9 @@
 @auth()
     Ну здарова {{auth()->user()->name}}
     <a href="{{route('logout')}}">Выйти</a>
+    @if(Auth::user()->hasAccess('*'))
+        <a href="{{route('platform.main')}}">Перейти в админ-панель</a>
+    @endif
 @endauth
 <br>
 @yield('content')
