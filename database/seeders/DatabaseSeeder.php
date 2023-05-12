@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
         $this->call(AccessTypesSeeder::class);
 
         User::factory(10)->create();
-
         Artisan::call('orchid:admin Lullen_Lullenium admin@admin.com 123');
 
         Pasta::factory(50)->create();
+        Pasta::factory(50)->create(['user_id' => 11]);
     }
 }

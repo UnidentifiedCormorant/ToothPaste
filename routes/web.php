@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ComplaintsController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\PastaController;
 use App\Http\Controllers\UserController;
@@ -33,3 +34,9 @@ Route::name('pastas.')->group(function ()
 });
 
 Route::get('changeBan/{id}', [UserController::class, 'changeBan'])->name('changeBan');
+
+Route::name('complaints.')->group(function ()
+{
+    Route::get('/create/{pastaId}', [ComplaintsController::class, 'create'])->name('create');
+    Route::post('/store', [ComplaintsController::class, 'store'])->name('store');
+});

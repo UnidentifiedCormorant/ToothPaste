@@ -41,6 +41,11 @@ use Orchid\Screen\AsSource;
  * @method static \Illuminate\Database\Eloquent\Builder|Pasta whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Pasta whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Pasta whereUserId($value)
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Pasta defaultSort(string $column, string $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|Pasta filters(?mixed $kit = null, ?\Orchid\Filters\HttpFilter $httpFilter = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pasta filtersApply(iterable $filters = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Pasta filtersApplySelection($class)
  * @mixin \Eloquent
  */
 class Pasta extends Model
