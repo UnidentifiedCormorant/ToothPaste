@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Orchid\Screens\ComplaintsScreen;
+use App\Orchid\Screens\ComplaintsListScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
@@ -39,7 +39,7 @@ Route::screen('/main', PlatformScreen::class)
 Route::screen('pastas', PastasListScreen::class)->name('platform.pastas');
 
 // Жалобы
-Route::screen('complaints', ComplaintsScreen::class)->name('platform.complaints');
+Route::screen('complaints', ComplaintsListScreen::class)->name('platform.complaints');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

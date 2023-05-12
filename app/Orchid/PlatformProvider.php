@@ -30,8 +30,11 @@ class PlatformProvider extends OrchidServiceProvider
         return [
             Menu::make('Пасты')
                 ->icon('user')
-                ->route('platform.pastas')
-                ->title('Пасты'),
+                ->route('platform.pastas'),
+
+            Menu::make('Жалобы')
+                ->icon('fire')
+                ->route('platform.complaints'),
 //            Menu::make('Example screen')
 //                ->icon('monitor')
 //                ->route('platform.example')
@@ -87,7 +90,6 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('user')
                 ->route('platform.systems.users')
                 ->permission('platform.systems.users')
-                ->title(__('Access rights')),
 //
 //            Menu::make(__('Roles'))
 //                ->icon('lock')

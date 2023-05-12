@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Complaint;
 use App\Models\Pasta;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -22,5 +23,7 @@ class DatabaseSeeder extends Seeder
 
         Pasta::factory(50)->create();
         Pasta::factory(50)->create(['user_id' => 11]);
+
+        Complaint::factory(10)->create();
     }
 }
