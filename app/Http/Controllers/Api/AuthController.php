@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
@@ -22,15 +23,11 @@ class AuthController extends Controller
      * @param AuthService $service
      * @return \Illuminate\Http\JsonResponse
      */
-    public function auth(AuthRequest $request, AuthService $service): JsonResponse
+    public function auth(AuthRequest $request, AuthService $service): UserResource
     {
         $data = $request->validated();
 
-        return $service->attemptAuth($data)
-            ? response()->json([
-                'status' => 'Authenticated'
-            ], 200)
-            : abort(404);
+        return $service->attemptAuth($data) ? new UserResource(Auth::user()) : abort(404);
     }
 
     /**

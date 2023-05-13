@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PastaRequest;
+use App\Http\Resources\Pasta\PastaResource;
 use App\Jobs\HidePastaJob;
 use App\Models\Pasta;
 use App\Repositories\Interfaces\PastaRepositoryInterface;
@@ -25,15 +26,15 @@ class PastaController extends Controller
      *
      * @param string $hash
      * @param PastaRepositoryInterface $repository
-     * @return View
+     * @return PastaResource
      */
-    public function show(string $hash, PastaRepositoryInterface $repository) : View
+    public function show(string $hash, PastaRepositoryInterface $repository) : PastaResource
     {
         $pasta = $repository->getPasta($hash);
 
         $pasta->privateCheck();
 
-        return view('pastas.show', compact('pasta'));
+        return new PastaResource($pasta);
     }
 
     /**

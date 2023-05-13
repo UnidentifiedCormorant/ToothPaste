@@ -18,7 +18,7 @@ return new class extends Migration
 
             $table->longText('content');
 
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable()->default(null);
             $table->unsignedBigInteger('pasta_id');
 
             $table->timestamps();

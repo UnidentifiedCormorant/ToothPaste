@@ -34,7 +34,11 @@ class ComplaintsController extends Controller
     public function store(ComplaintRequest $request) : RedirectResponse
     {
         $data = $request->validated();
-        $data['user_id'] = Auth::user()->id;
+
+        if(Auth::check())
+        {
+            $data['user_id'] = Auth::user()->id;
+        }
 
         Complaint::create($data);
 
