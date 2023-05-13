@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PastaRequest;
 use App\Jobs\HidePastaJob;
 use App\Models\Pasta;
+use App\Repositories\Interfaces\PastaRepositoryInterface;
+use App\Repositories\PastaRepository;
+use App\Services\PastaService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,11 +24,12 @@ class PastaController extends Controller
      * Возвращает пасту по хэшу
      *
      * @param string $hash
+     * @param PastaRepositoryInterface $repository
      * @return View
      */
-    public function show(string $hash) : View
+    public function show(string $hash, PastaRepositoryInterface $repository) : View
     {
-        $pasta = Pasta::where('hash', $hash)->first();
+        $pasta = $repository->getPasta($hash);
 
         $pasta->privateCheck();
 
@@ -54,25 +58,17 @@ class PastaController extends Controller
      * Добавляет объект в базу на осонове данных с формы
      *
      * @param PastaRequest $request
+     * @param PastaService $service
      * @return RedirectResponse
-     * @return string $url: упаковывает ссылку на созданную пасту
      */
-    public function store(PastaRequest $request) : RedirectResponse
+    public function store(PastaRequest $request, PastaService $service) : RedirectResponse
     {
         $data = $request->validated();
 
-        if (Auth::check())
+        $pasta = $service->store($data);
+
+        if ($request['expirationTime'] != null)
         {
-            $data['user_id'] = auth()->user()->id;
-        }
-
-        $data['hash'] = substr(md5(time()), 0, 16);
-
-        $pasta = Pasta::create($data);
-
-        if ($data['expirationTime'] != null)
-        {
-            //$url = URL::temporarySignedRoute('pastas.show', now()->addMinutes($data['expirationTime']), ['id' => $pasta]);
             HidePastaJob::dispatch($pasta->id)->delay(now()->addMinutes($data['expirationTime']));
         }
 

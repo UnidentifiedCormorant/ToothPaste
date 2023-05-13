@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -38,47 +39,29 @@ class AuthController extends Controller
      * Осуществляет вход в приложение
      *
      * @param AuthRequest $request
+     * @param AuthService $service
      * @return RedirectResponse|\Exception
      */
-    public function auth(AuthRequest $request) : RedirectResponse|\Exception
+    public function auth(AuthRequest $request, AuthService $service) : RedirectResponse|\Exception
     {
         $data = $request->validated();
 
-        if(Auth::attempt(array(
-            'email' => $data['email'],
-            'password' => $data['password']
-        )))
-        {
-            $user = User::where([
-                'email' => $data['email'],
-            ])->first();
-
-            if($user->banned)
-            {
-                return abort(404);
-            }
-
-            return redirect()->route('index');
-        }
-        else
-        {
-            return abort(404);
-        }
+        return $service->attemptAuth($data);
     }
 
     /**
      * Создаёт нового пользователя
      *
      * @param RegisterRequest $request
+     * @param AuthService $service
      * @return RedirectResponse
      */
-    public function newUser(RegisterRequest $request) : RedirectResponse
+    public function newUser(RegisterRequest $request, AuthService $service) : RedirectResponse
     {
         $data = $request->validated();
 
-        $data['password'] = \Hash::make($data['password']);
+        $user = $service->store($data);
 
-        $user = User::firstOrCreate($data);
         Auth::login($user);
 
         return redirect()->route('index');

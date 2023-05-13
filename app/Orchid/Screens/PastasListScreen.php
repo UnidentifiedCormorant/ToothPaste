@@ -57,7 +57,7 @@ class PastasListScreen extends Screen
                 TD::make('title', 'Название')->sort()->filter(TD::FILTER_TEXT),
                 TD::make('content', 'Содержимое')->width(300)->defaultHidden(),
                 TD::make('user_id', 'Автор')->render(function (Pasta $pasta){
-                    return $pasta->user === null ? 'Аноном' :  $pasta->user->name;
+                    return $pasta->user === null ? 'Аноном' : $pasta->user->name;
                 }),
                 TD::make('access_type_id', 'Тип доступа')->render(function (Pasta $pasta){
                     return $pasta->accessType->title;

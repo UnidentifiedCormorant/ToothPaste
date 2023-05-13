@@ -24,7 +24,6 @@ class PastaRequest extends FormRequest
         return [
             'title' => 'required',
             'content' => 'required',
-            'expirationTime' => '',
             'access_type_id' => ''
 ,        ];
     }

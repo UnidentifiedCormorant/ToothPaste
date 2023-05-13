@@ -22,7 +22,7 @@ class PastaFactory extends Factory
         return [
             'title' => fake()->sentence,
             'content' => fake()->text,
-            'hash' => substr(md5(time()), 0, 16),
+            'hash' => substr(md5(time() + rand(1, 10000)), 0, 16),
             'user_id' => User::get()->random()->id,
         ];
     }
