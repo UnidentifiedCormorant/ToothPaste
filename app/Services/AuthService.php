@@ -22,9 +22,9 @@ class AuthService
 
     /**
      * @param mixed $data
-     * @return RedirectResponse|never
+     * @return bool
      */
-    public function attemptAuth(mixed $data) : RedirectResponse|\Exception
+    public function attemptAuth(mixed $data) : bool
     {
         if(Auth::attempt(array(
             'email' => $data['email'],
@@ -37,14 +37,14 @@ class AuthService
 
             if($user->banned)
             {
-                return abort(404);
+                return false;
             }
 
-            return redirect()->route('index');
+            return true;
         }
         else
         {
-            return abort(404);
+            return false;
         }
     }
 }

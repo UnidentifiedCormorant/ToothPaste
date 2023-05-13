@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 class PastaService
 {
     /**
+     * Добавляет пасту в базу данных
+     *
      * @param mixed $data
      * @return Pasta
      */

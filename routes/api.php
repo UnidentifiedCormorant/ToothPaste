@@ -1,18 +1,34 @@
 <?php
 
+use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ComplaintsController;
+use App\Http\Controllers\Api\IndexController;
+use App\Http\Controllers\Api\PastaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
+Route::get('/', [IndexController::class, 'index']);
+
+Route::get('logout', [AuthController::class, 'logout']);
+
+Route::post('auth', [AuthController::class, 'auth']);
+Route::post('newUser', [AuthController::class, 'newUser']);
+
+Route::name('pastas.')->group(function ()
+{
+    Route::get('myPastas', [PastaController::class, 'myPastas']);
+    Route::get('/{hash}', [PastaController::class, 'show']);
+    Route::post('/', [PastaController::class, 'store']);
+});
+
+Route::get('changeBan/{id}', [AdminController::class, 'changeBan']);
+
+Route::name('complaints.')->group(function ()
+{
+    Route::get('/create/{pastaId}', [ComplaintsController::class, 'create']);
+    Route::post('/store', [ComplaintsController::class, 'store']);
+});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

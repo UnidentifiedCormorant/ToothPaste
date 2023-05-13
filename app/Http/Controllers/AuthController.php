@@ -46,7 +46,7 @@ class AuthController extends Controller
     {
         $data = $request->validated();
 
-        return $service->attemptAuth($data);
+        return $service->attemptAuth($data) ? redirect()->route('index') :  abort(404);
     }
 
     /**
