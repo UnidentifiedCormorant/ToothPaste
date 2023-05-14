@@ -65,11 +65,11 @@ class PastaController extends Controller
     {
         $data = $request->validated();
 
-        $pasta = $service->store($data);
+        $pasta = $service->store($data, $request['language']);
 
         if ($request['expirationTime'] != null)
         {
-            HidePastaJob::dispatch($pasta->id)->delay(now()->addMinutes($data['expirationTime']));
+            HidePastaJob::dispatch($pasta->id)->delay(now()->addMinutes($request['expirationTime']));
         }
 
         return redirect()->route('pastas.show', $pasta->hash);

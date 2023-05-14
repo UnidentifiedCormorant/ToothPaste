@@ -23,11 +23,20 @@
             <option value="43200">1 месяц</option>
         </select>
 
-        <label for="access_type_id">Время существования</label>
+        <label for="access_type_id">Тип доступа</label>
         <select name="access_type_id">
             @foreach($accessTypes as $accessType)
-                <option value="{{$accessType->id}}">{{$accessType->title}}</option>
+                @if($accessType->id == 3 && !\Illuminate\Support\Facades\Auth::check())
+                @else
+                    <option value="{{$accessType->id}}">{{$accessType->title}}</option>
+                @endif
             @endforeach
+        </select>
+
+        <label for="language">Язык</label>
+        <select name="language">
+            <option value="ru">Русский</option>
+            <option value="en">Английский</option>
         </select>
 
         <button type="submit">Добавить</button>

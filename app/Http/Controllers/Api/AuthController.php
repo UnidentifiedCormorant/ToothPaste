@@ -46,7 +46,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         return \response()->json([
-            'status' => 'You registered now'
+            'status' => 'You registered now',
         ]);
     }
 

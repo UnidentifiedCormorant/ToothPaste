@@ -3,7 +3,7 @@
 
     <h2>{{$pasta->title}}</h2>
 
-    <p>{{$pasta->content}}</p>
+    <p>{!! $pasta->content !!}</p>
 
     <a href="{{route('complaints.create', $pasta->id)}}}">ПОЖАЛОВАЦА</a>
 

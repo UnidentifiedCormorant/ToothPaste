@@ -26,8 +26,6 @@ class ComplaintsController extends Controller
     {
         $data = $request->validated();
 
-        //Auth::login(User::find(11));
-
         if(Auth::check())
         {
             $data['user_id'] = Auth::user()->id;

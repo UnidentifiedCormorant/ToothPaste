@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PastaRequest;
+use App\Http\Resources\Pasta\PastaCollection;
 use App\Http\Resources\Pasta\PastaResource;
 use App\Jobs\HidePastaJob;
 use App\Models\Pasta;
@@ -40,14 +41,13 @@ class PastaController extends Controller
     /**
      * Возвращает все пасты авторизованного пользователя
      *
-     * @return View|\Illuminate\Foundation\Application|void
+     * @return PastaCollection
      */
-    public function myPastas()
+    public function myPastas() : PastaCollection
     {
         if (Auth::check())
         {
-            $pastas = Auth::user()->pastas()->paginate(10);
-            return view('pastas.myPastas', compact('pastas'));
+            return new PastaCollection(Auth::user()->pastas()->paginate(10));
         }
         else
         {
@@ -56,23 +56,23 @@ class PastaController extends Controller
     }
 
     /**
-     * Добавляет объект в базу на осонове данных с формы
+     * Добавляет объект в базу на осонове данных с фронта
      *
      * @param PastaRequest $request
      * @param PastaService $service
-     * @return RedirectResponse
+     * @return PastaResource
      */
-    public function store(PastaRequest $request, PastaService $service) : RedirectResponse
+    public function store(PastaRequest $request, PastaService $service) : PastaResource
     {
         $data = $request->validated();
 
-        $pasta = $service->store($data);
+        $pasta = $service->store($data, $request['language']);
 
         if ($request['expirationTime'] != null)
         {
-            HidePastaJob::dispatch($pasta->id)->delay(now()->addMinutes($data['expirationTime']));
+            HidePastaJob::dispatch($pasta->id)->delay(now()->addMinutes($request['expirationTime']));
         }
 
-        return redirect()->route('pastas.show', $pasta->hash);
+        return new PastaResource($pasta);
     }
 }
