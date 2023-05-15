@@ -61,7 +61,7 @@ http://pastebin.com Он позволяет заливать куски текс
 
 1. Откройте консоль, переместитесь в папку, куда будет клонироваться проект. Запустите в терминале команду 
 ```
-git clone https://github.com/UnidentifiedCormorant/ToothPaste
+git clone https://github.com/UnidentifiedCormorant/ToothPaste.git
 ```
 2. После окончания клонирования проекта, запустите docker (если вы ещё этого не сделали). Запустите команду:
 ```
