@@ -24,9 +24,14 @@ Route::get('myPastas', [PastaController::class, 'myPastas']);
 Route::get('/{hash}', [PastaController::class, 'show']);
 Route::post('/', [PastaController::class, 'store']);
 
-Route::get('changeBan/{id}', [AdminController::class, 'changeBan']);
-
 Route::prefix('complaints')->group(function ()
 {
     Route::post('/store', [ComplaintsController::class, 'store']);
+});
+
+Route::middleware(['auth', 'CheckAdmin'])->prefix('admin')->group(function ()
+{
+    Route::get('changeBan/{id}', [AdminController::class, 'changeBan']);
+    Route::get('users', [AdminController::class, 'users']);
+    Route::get('complaints', [AdminController::class, 'complaints']);
 });

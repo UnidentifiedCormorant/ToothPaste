@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Complaint\ComplaintCollection;
+use App\Http\Resources\User\UserCollection;
+use App\Http\Resources\User\UserResource;
+use App\Models\Complaint;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,13 +15,12 @@ use Illuminate\Support\Facades\Redirect;
 class AdminController extends Controller
 {
     /**
-     * @param string $id
-     *
      * Банит или разбанивает пользователя
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param string $id
+     * @return UserResource
      */
-    public function changeBan(string $id) : RedirectResponse
+    public function changeBan(string $id) : UserResource
     {
         $user = User::find($id);
 
@@ -30,6 +33,21 @@ class AdminController extends Controller
         }
         $user->save();
 
-        return redirect('http://127.0.0.1:8000/admin/users');
+        return new UserResource($user);
+    }
+
+    /**
+     * Возвращает всех пользователей
+     *
+     * @return UserCollection
+     */
+    public function users() :UserCollection
+    {
+        return new UserCollection(User::paginate(10));
+    }
+
+    public function complaints()
+    {
+        return new ComplaintCollection(Complaint::paginate(10));
     }
 }
