@@ -4,8 +4,63 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7804b367f8bf4ae325724e15173e3f9f",
+    "content-hash": "c44331516f72def70c4407f6e357f5ee",
     "packages": [
+        {
+            "name": "atwinta/data-transfer-object",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Atwinta/data-transfer-object.git",
+                "reference": "d8b7f1b7c643720312a69c6dbc8e9a0eb40051ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Atwinta/data-transfer-object/zipball/d8b7f1b7c643720312a69c6dbc8e9a0eb40051ef",
+                "reference": "d8b7f1b7c643720312a69c6dbc8e9a0eb40051ef",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^9.0",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.1",
+                "nunomaduro/larastan": "^2.1",
+                "orchestra/testbench": "^7.7",
+                "phpstan/phpstan-strict-rules": "^1.4"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Atwinta\\DTO\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Atwinta\\DTO\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pavel Shevchenko",
+                    "email": "pasha.shevchenko.90@gmail.com"
+                }
+            ],
+            "description": "Data transfer objects for Laravel",
+            "homepage": "https://github.com/Atwinta/data-transfer-object",
+            "support": {
+                "issues": "https://github.com/Atwinta/data-transfer-object/issues",
+                "source": "https://github.com/Atwinta/data-transfer-object/tree/1.1.0"
+            },
+            "time": "2022-09-22T09:25:21+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.11.0",
