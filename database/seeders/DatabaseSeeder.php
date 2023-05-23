@@ -16,8 +16,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(AccessTypesSeeder::class);
-
         User::factory(10)->create();
         Artisan::call('orchid:admin Lullen_Lullenium admin@admin.com 123');
 

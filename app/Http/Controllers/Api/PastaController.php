@@ -9,7 +9,7 @@ use App\Http\Resources\Pasta\PastaResource;
 use App\Jobs\HidePastaJob;
 use App\Models\Pasta;
 use App\Repositories\Interfaces\PastaRepositoryInterface;
-use App\Repositories\PastaRepository;
+use App\Repositories\PastaEloquent;
 use App\Services\PastaService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

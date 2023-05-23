@@ -2,22 +2,33 @@
 
 namespace App\Services;
 
+use App\Domain\DTO\UserData;
 use App\Http\Requests\AuthRequest;
 use App\Models\User;
+use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Services\Interfaces\UserServiceInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
-class AuthService
+class UserService implements UserServiceInterface
 {
+    public function __construct(
+        public UserRepositoryInterface $userRepository
+    )
+    {
+    }
+
     /**
      * @param mixed $data
      * @return User
      */
-    public function store(mixed $data) : User
+    public function store(UserData $data) : User
     {
-        $data['password'] = \Hash::make($data['password']);
-
-        return User::firstOrCreate($data);
+        return $this->userRepository->create([
+            'name' => $data->name,
+            'email' => $data->email,
+            'password' => \Hash::make($data->password)
+        ]);
     }
 
     /**

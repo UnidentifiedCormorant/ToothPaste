@@ -7,7 +7,7 @@ use App\Http\Requests\AuthRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\User\UserResource;
 use App\Models\User;
-use App\Services\AuthService;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,10 +20,10 @@ class AuthController extends Controller
 {
     /**
      * @param AuthRequest $request
-     * @param AuthService $service
+     * @param UserService $service
      * @return \Illuminate\Http\JsonResponse
      */
-    public function auth(AuthRequest $request, AuthService $service): UserResource
+    public function auth(AuthRequest $request, UserService $service): UserResource
     {
         $data = $request->validated();
 
@@ -34,10 +34,10 @@ class AuthController extends Controller
      * Создаёт нового пользователя
      *
      * @param RegisterRequest $request
-     * @param AuthService $service
+     * @param UserService $service
      * @return JsonResponse
      */
-    public function newUser(RegisterRequest $request, AuthService $service): JsonResponse
+    public function newUser(RegisterRequest $request, UserService $service): JsonResponse
     {
         $data = $request->validated();
 

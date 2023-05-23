@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\DTO\UserData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
-use App\Services\AuthService;
+use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Services\Interfaces\UserServiceInterface;
+use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +18,13 @@ use Orchid\Alert\Toast;
 
 class AuthController extends Controller
 {
+    public function __construct(
+        public UserServiceInterface $userService,
+        public UserRepositoryInterface $userRepository
+    )
+    {
+    }
+
     /**
      * Возвращает форму для авторизации
      *
@@ -39,32 +49,34 @@ class AuthController extends Controller
      * Осуществляет вход в приложение
      *
      * @param AuthRequest $request
-     * @param AuthService $service
+     * @param UserService $service
      * @return RedirectResponse|\Exception
      */
-    public function auth(AuthRequest $request, AuthService $service) : RedirectResponse|\Exception
+    public function auth(AuthRequest $request) : RedirectResponse|\Exception
     {
         $data = $request->validated();
 
-        return $service->attemptAuth($data) ? redirect()->route('index') :  abort(404);
+        return $this->userService->attemptAuth($data) ? redirect()->route('pastas.index') :  abort(404);
     }
 
     /**
      * Создаёт нового пользователя
      *
      * @param RegisterRequest $request
-     * @param AuthService $service
+     * @param UserService $service
      * @return RedirectResponse
      */
-    public function newUser(RegisterRequest $request, AuthService $service) : RedirectResponse
+    public function newUser(RegisterRequest $request) : RedirectResponse
     {
-        $data = $request->validated();
+        $data = UserData::create(
+            $request->validated()
+        );
 
-        $user = $service->store($data);
+        $user = $this->userService->store($data);
 
         Auth::login($user);
 
-        return redirect()->route('index');
+        return redirect()->route('pastas.index');
     }
 
     /**
@@ -76,6 +88,6 @@ class AuthController extends Controller
     {
         Auth::logout();
 
-        return redirect()->route('index');
+        return redirect()->route('pastas.index');
     }
 }

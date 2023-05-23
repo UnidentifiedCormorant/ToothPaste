@@ -24,6 +24,7 @@ class PastaFactory extends Factory
             'content' => fake()->text,
             'hash' => substr(md5(time() + rand(1, 10000)), 0, 16),
             'user_id' => User::get()->random()->id,
+            'access_type' => 1
         ];
     }
 }

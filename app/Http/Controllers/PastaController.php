@@ -2,38 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Domain\DTO\PastaData;
 use App\Http\Requests\PastaRequest;
 use App\Jobs\HidePastaJob;
-use App\Models\Pasta;
 use App\Repositories\Interfaces\PastaRepositoryInterface;
-use App\Repositories\PastaRepository;
-use App\Services\PastaService;
+use App\Services\Interfaces\PastaServiceInterface;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class PastaController extends Controller
 {
+
+    public function __construct(public PastaRepositoryInterface $pastaRepository,
+                                public PastaServiceInterface    $pastaService)
+    {
+    }
+
     /**
-     * Возвращает пасту по хэшу
-     *
      * @param string $hash
-     * @param PastaRepositoryInterface $repository
      * @return View
      */
-    public function show(string $hash, PastaRepositoryInterface $repository) : View
+    public function show(string $hash): View
     {
-        $pasta = $repository->getPasta($hash);
+        $pasta = $this->pastaService->show($hash, Auth::user());
 
-        $pasta->privateCheck();
-
-        return view('pastas.show', compact('pasta'));
+        return view('pastas.show', ['pasta' => $pasta]);
     }
 
     /**
@@ -43,35 +37,29 @@ class PastaController extends Controller
      */
     public function myPastas()
     {
-        if (Auth::check())
-        {
-            $pastas = Auth::user()->pastas()->paginate(10);
-            return view('pastas.myPastas', compact('pastas'));
-        }
-        else
-        {
-            abort(403);
-        }
+        $pastas = $this->pastaService->myPastas(Auth::user());
+
+        return view('pastas.myPastas', ['pastas' => $pastas]);
     }
 
     /**
-     * Добавляет объект в базу на осонове данных с формы
+     * Добавляет объект в базу на основе данных с формы
      *
      * @param PastaRequest $request
-     * @param PastaService $service
      * @return RedirectResponse
      */
-    public function store(PastaRequest $request, PastaService $service) : RedirectResponse
+    public function store(PastaRequest $request): RedirectResponse
     {
-        $data = $request->validated();
+        $data = PastaData::create(
+            $request->validated()
+        );
 
-        $pasta = $service->store($data, $request['language']);
+        $pasta = $this->pastaService->store($data, Auth::user());
 
-        if ($request['expirationTime'] != null)
-        {
+        if ($data->expiration_time != null) {
             HidePastaJob::dispatch($pasta->id)->delay(now()->addMinutes($request['expirationTime']));
         }
 
-        return redirect()->route('pastas.show', $pasta->hash);
+        return redirect()->route('show', $pasta->hash);
     }
 }

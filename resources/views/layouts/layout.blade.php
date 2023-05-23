@@ -13,13 +13,13 @@
 
 <h2>Последние пасты</h2>
 @foreach($lastPastas as $lPasta)
-    <a href="{{route('pastas.show', $lPasta->hash)}}">{{$lPasta->title}}</a>
+    <a href="{{route('show', $lPasta->hash)}}">{{$lPasta->title}}</a>
 @endforeach
 <br>
 @auth()
     <h2>МОИ последние пасты</h2>
     @foreach($myPastas as $pasta)
-        <a href="{{route('pastas.show', $pasta->hash)}}">{{$pasta->title}}</a>
+        <a href="{{route('show', $pasta->hash)}}">{{$pasta->title}}</a>
     @endforeach
     <br>
     <a href="{{route('pastas.myPastas')}}">МОИ ПАСТЫ</a>

@@ -12,23 +12,19 @@
         <label for="content">Содержание</label>
         <textarea name="content" type="text"></textarea>
 
-        <label for="expirationTime">Время существования</label>
-        <select name="expirationTime">
-            <option value="">Без ограничения</option>
-            <option value="10">10 минут</option>
-            <option value="60">1 час</option>
-            <option value="180">3 часа</option>
-            <option value="1440">1 день</option>
-            <option value="10080">1 неделя</option>
-            <option value="43200">1 месяц</option>
+        <label for="expiration_time">Время существования</label>
+        <select name="expiration_time">
+            @foreach(\App\Domain\Enum\ExpirationTime::cases() as $time)
+                <option value="{{$time->value}}">{{$time->title()}}</option>
+            @endforeach
         </select>
 
-        <label for="access_type_id">Тип доступа</label>
-        <select name="access_type_id">
-            @foreach($accessTypes as $accessType)
-                @if($accessType->id == 3 && !\Illuminate\Support\Facades\Auth::check())
+        <label for="access_type">Тип доступа</label>
+        <select name="access_type">
+            @foreach(\App\Domain\Enum\AccessType::cases() as $accessType)
+                @if($accessType == \App\Domain\Enum\AccessType::Private && !\Illuminate\Support\Facades\Auth::check())
                 @else
-                    <option value="{{$accessType->id}}">{{$accessType->title}}</option>
+                    <option value="{{$accessType->value}}">{{$accessType->title()}}</option>
                 @endif
             @endforeach
         </select>

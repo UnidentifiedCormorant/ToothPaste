@@ -22,6 +22,6 @@
 
 <a href="{{route('register')}}">Нет учётной записи? Зарегестрируйтесь</a>
 
-<a href="{{route('index')}}">Назад</a>
+<a href="{{route('pastas.index')}}">Назад</a>
 
 @endsection

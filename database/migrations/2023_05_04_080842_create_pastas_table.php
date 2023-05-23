@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('hash');
 
             $table->unsignedBigInteger('user_id')->nullable()->default(null);
-            $table->unsignedBigInteger('access_type_id')->default(1);
+            $table->unsignedBigInteger('access_type');
 
             $table->timestamps();
             $table->softDeletes();

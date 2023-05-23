@@ -10,13 +10,13 @@
         @foreach($pastas as $pasta)
             <tr>
                 <td>{{$pasta->title}}</td>
-                <td><a href="{{route('pastas.show', $pasta->hash)}}">{{route('pastas.show', $pasta->hash)}}</a></td>
-                <td>{{$pasta->accessType->title}}</td>
+                <td><a href="{{route('show', $pasta->hash)}}">{{route('show', $pasta->hash)}}</a></td>
+                <td>{{\App\Domain\Enum\AccessType::from($pasta->access_type)->value}}</td>
             </tr>
         @endforeach
     </table>
     <br>
-    <a href="{{route('index')}}">Назад</a>
+    <a href="{{route('pastas.index')}}">Назад</a>
 
     {{ $pastas->links() }}
 

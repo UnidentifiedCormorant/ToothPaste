@@ -8,8 +8,8 @@
     <a href="{{route('complaints.create', $pasta->id)}}}">ПОЖАЛОВАЦА</a>
 
     <p>Быстрая ссылка:</p>
-    <h2>{{route('pastas.show', $pasta->hash)}}</h2>
+    <h2>{{route('show', $pasta->hash)}}</h2>
     <br>
     <br>
-    <a href="{{route('index')}}">Назад</a>
+    <a href="{{route('pastas.index')}}">Назад</a>
 @endsection

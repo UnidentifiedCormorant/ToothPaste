@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Artisan;
 |
 */
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+Artisan::command('debug', function () {
+    $num = \App\Domain\Enum\AccessType::from(2);
+    dd($num);
+});

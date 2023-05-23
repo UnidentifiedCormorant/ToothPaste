@@ -58,7 +58,7 @@ class Pasta extends Model
         'expirationTime',
         'hash',
         'user_id',
-        'access_type_id',
+        'access_type',
     ];
 
     protected $allowedSorts = [
@@ -74,7 +74,7 @@ class Pasta extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function accessType() : BelongsTo
+    public function accessType(): BelongsTo
     {
         return $this->belongsTo(AccessType::class);
     }
@@ -84,48 +84,8 @@ class Pasta extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user() : BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Проверяет, является ли паста доступной только автору
-     *
-     * @return \Illuminate\Foundation\Application|void
-     */
-    public function privateCheck() : void
-    {
-        if($this->isPrivate())
-        {
-            if(!Auth::check())
-            {
-                abort(403);
-            }
-            elseif(!$this->isMine())
-            {
-                abort(403);
-            }
-        }
-    }
-
-    /**
-     * Проверяет, является ли паста приватной
-     *
-     * @return bool
-     */
-    private function isPrivate() : bool
-    {
-        return $this->access_type_id == 3;
-    }
-
-    /**
-     * Проверяет, принадлежит ли паста авторизованному пользователю
-     *
-     * @return bool
-     */
-    private function isMine() : bool
-    {
-        return $this->user_id == Auth::user()->id;
     }
 }

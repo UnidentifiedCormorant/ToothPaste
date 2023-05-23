@@ -22,22 +22,23 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::composer('*', function ($view)
+        View::composer('layouts.layout', function ($view)
         {
             $myPastas = null;
             if (\Auth::check())
             {
                 $myPastas = Pasta::where([
                     ['user_id', auth()->user()->id],
-                    ['access_type_id', 1]
+                    ['access_type', 1]
                 ])->latest()->take(10)->get();
             }
 
-            $lastPastas = Pasta::where('access_type_id', 1)->latest()->take(10)->get();
+            $lastPastas = Pasta::where('access_type', 1)->latest()->take(10)->get();
 
-            $accessTypes = AccessType::all();
-
-            $view->with(compact('myPastas', 'lastPastas', 'accessTypes'));
+            $view->with([
+                'myPastas' => $myPastas,
+                'lastPastas' => $lastPastas
+            ]);
         });
     }
 }
