@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\DTO\ComplaintData;
+use App\Domain\DTO\PastaData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ComplaintRequest;
 use App\Models\Complaint;
 use App\Models\Pasta;
+use App\Repositories\Interfaces\ComplaintRepositoryInterface;
+use App\Repositories\Interfaces\PastaRepositoryInterface;
+use App\Services\Interfaces\ComplaintServiceInterface;
+use App\Services\Interfaces\PastaServiceInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,35 +19,40 @@ use Illuminate\View\View;
 
 class ComplaintsController extends Controller
 {
+    public function __construct(
+        public ComplaintRepositoryInterface $complaintRepository,
+        public ComplaintServiceInterface $complaintService,
+        public PastaRepositoryInterface $pastaRepository,
+    )
+    {
+    }
+
     /**
      * Отправляет на страницу для создания жалобы
      *
      * @param string $pastaId
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
     public function create(string $pastaId) : View
     {
-        $pasta = Pasta::find($pastaId);
-        return view('complaints.create', compact('pasta'));
+        $pasta = $this->pastaRepository->getPastaById($pastaId);
+        return view('complaints.create', ['pasta' => $pasta]);
     }
 
     /**
      * Создаёт жалобу
      *
      * @param ComplaintRequest $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return RedirectResponse
      */
     public function store(ComplaintRequest $request) : RedirectResponse
     {
-        $data = $request->validated();
+        $data = ComplaintData::create(
+            $request->validated()
+        );
 
-        if(Auth::check())
-        {
-            $data['user_id'] = Auth::user()->id;
-        }
+        $this->complaintService->store($data, Auth::user());
 
-        Complaint::create($data);
-
-        return redirect(route('index'));
+        return redirect(route('pastas.index'));
     }
 }

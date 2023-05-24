@@ -7,7 +7,7 @@
 
     <form action="{{route('complaints.store')}}" method="post">
         @csrf
-        <label for="title">Содержание жалобы</label>
+        <label for="content">Содержание жалобы</label>
         <textarea name="content"></textarea>
 
         <input name="pasta_id" type="hidden" value="{{$pasta->id}}">
@@ -15,7 +15,7 @@
         <button type="submit">Отправить жалобу</button>
     </form>
 
-    <a href="{{route('index')}}">Назад</a>
+    <a href="{{route('pastas.index')}}">Назад</a>
 
 
 @endsection

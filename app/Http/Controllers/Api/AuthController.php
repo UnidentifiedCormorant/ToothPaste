@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Domain\DTO\AuthData;
+use App\Domain\DTO\UserData;
+use App\Exceptions\BanException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\User\AuthResource;
 use App\Http\Resources\User\UserResource;
 use App\Models\User;
+use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Services\Interfaces\UserServiceInterface;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -18,36 +24,45 @@ use Orchid\Alert\Toast;
 
 class AuthController extends Controller
 {
+    public function __construct(
+        public UserServiceInterface    $userService,
+        public UserRepositoryInterface $userRepository
+    )
+    {
+    }
+
     /**
      * @param AuthRequest $request
-     * @param UserService $service
-     * @return \Illuminate\Http\JsonResponse
+     * @return AuthResource
      */
-    public function auth(AuthRequest $request, UserService $service): UserResource
+    public function auth(AuthRequest $request): AuthResource
     {
-        $data = $request->validated();
+        $data = AuthData::create(
+            $request->validated()
+        );
 
-        return $service->attemptAuth($data) ? new UserResource(Auth::user()) : abort(404);
+        $user = $this->userService->attemptAuth($data);
+
+        return new AuthResource($user);
     }
 
     /**
      * Создаёт нового пользователя
      *
      * @param RegisterRequest $request
-     * @param UserService $service
-     * @return JsonResponse
+     * @return UserResource
      */
-    public function newUser(RegisterRequest $request, UserService $service): JsonResponse
+    public function newUser(RegisterRequest $request): UserResource
     {
-        $data = $request->validated();
+        $data = UserData::create(
+            $request->validated()
+        );
 
-        $user = $service->store($data);
+        $user = $this->userService->store($data);
 
         Auth::login($user);
 
-        return \response()->json([
-            'status' => 'You registered now',
-        ]);
+        return new UserResource($user);
     }
 
     /**

@@ -25,7 +25,7 @@ Route::get('/{hash}', [PastaController::class, 'show'])->name('show')->middlewar
 
 Route::get('changeBan/{id}', [UserController::class, 'changeBan'])->name('changeBan');
 
-Route::name('complaints.')->group(function () {
+Route::group(['middleware' => 'auth:web', 'as' => 'complaints.'], function () {
     Route::get('/create/{pastaId}', [ComplaintsController::class, 'create'])->name('create');
     Route::post('/store', [ComplaintsController::class, 'store'])->name('store');
 });

@@ -25,7 +25,7 @@ class ComplaintRequest extends FormRequest
     {
         return [
             'content' => 'required',
-            'pasta_id' => '',
+            'pasta_id' => 'required',
         ];
     }
 }

@@ -2,37 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\DTO\AuthData;
 use App\Domain\DTO\UserData;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Services\Interfaces\UserServiceInterface;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use Orchid\Alert\Toast;
 
 class AuthController extends Controller
 {
     public function __construct(
-        public UserServiceInterface $userService,
+        public UserServiceInterface    $userService,
         public UserRepositoryInterface $userRepository
     )
     {
-    }
-
-    /**
-     * Возвращает форму для авторизации
-     *
-     * @return View
-     */
-    public function login() : View
-    {
-        return view('auth.login');
     }
 
     /**
@@ -40,23 +27,26 @@ class AuthController extends Controller
      *
      * @return View
      */
-    public function register() : View
+    public function register(): View
     {
-        return view ('auth.register');
+        return view('auth.register');
     }
 
     /**
      * Осуществляет вход в приложение
      *
      * @param AuthRequest $request
-     * @param UserService $service
-     * @return RedirectResponse|\Exception
+     * @return RedirectResponse
      */
-    public function auth(AuthRequest $request) : RedirectResponse|\Exception
+    public function auth(AuthRequest $request): RedirectResponse
     {
-        $data = $request->validated();
+        $data = AuthData::create(
+            $request->validated()
+        );
 
-        return $this->userService->attemptAuth($data) ? redirect()->route('pastas.index') :  abort(404);
+        $this->userService->attemptAuth($data);
+
+        return redirect()->route('pastas.index');
     }
 
     /**
@@ -66,7 +56,7 @@ class AuthController extends Controller
      * @param UserService $service
      * @return RedirectResponse
      */
-    public function newUser(RegisterRequest $request) : RedirectResponse
+    public function newUser(RegisterRequest $request): RedirectResponse
     {
         $data = UserData::create(
             $request->validated()
@@ -80,11 +70,21 @@ class AuthController extends Controller
     }
 
     /**
+     * Возвращает форму для авторизации
+     *
+     * @return View
+     */
+    public function login(): View
+    {
+        return view('auth.login');
+    }
+
+    /**
      * Позволяет разлогиниться
      *
      * @return RedirectResponse
      */
-    public function logout() : RedirectResponse
+    public function logout(): RedirectResponse
     {
         Auth::logout();
 

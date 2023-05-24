@@ -7,9 +7,9 @@ use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
-* @mixin User
+* @mixin AuthEntity
  */
-class UserResource extends JsonResource
+class AuthResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,8 +20,9 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'name' => $this->name,
-            'banned' => $this->banned,
+            'name' => $this->user->name,
+            'banned' => $this->user->banned,
+            'token' => $this->token
         ];
     }
 }

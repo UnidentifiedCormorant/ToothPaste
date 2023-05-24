@@ -2,11 +2,18 @@
 
 namespace App\Repositories\Interfaces;
 
-use App\Domain\DTO\UserData;
+use App\Domain\DTO\AuthData;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Query\Builder;
 use Prettus\Repository\Contracts\RepositoryInterface;
+
 
 interface UserRepositoryInterface extends RepositoryInterface
 {
-    public function model();
+    public function getUserByEmail(string $email): User|null;
+
+    public function getUserById(string $id): User;
+
+    public function getAllUsers(): Collection;
 }

@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Repositories\Interfaces\PastaRepositoryInterface;
 use App\Repositories\PastaEloquent;
+use App\Services\ComplaintService;
+use App\Services\Interfaces\ComplaintServiceInterface;
 use App\Services\Interfaces\PastaServiceInterface;
 use App\Services\Interfaces\UserServiceInterface;
 use App\Services\PastaService;
@@ -14,7 +16,8 @@ class AppServiceProvider extends ServiceProvider
 {
     public array $bindings = [
         PastaServiceInterface::class => PastaService::class,
-        UserServiceInterface::class => UserService::class
+        UserServiceInterface::class => UserService::class,
+        ComplaintServiceInterface::class => ComplaintService::class,
     ];
     /**
      * Register any application services.

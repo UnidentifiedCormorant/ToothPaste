@@ -15,6 +15,6 @@ use Illuminate\Support\Facades\Artisan;
 */
 
 Artisan::command('debug', function () {
-    $num = \App\Domain\Enum\AccessType::from(2);
-    dd($num);
+    $user = \App\Models\User::first();
+    dd(is_bool($user->banned));
 });

@@ -8,29 +8,32 @@ use App\Http\Resources\User\UserCollection;
 use App\Http\Resources\User\UserResource;
 use App\Models\Complaint;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
+use App\Repositories\Interfaces\ComplaintRepositoryInterface;
+use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Services\Interfaces\UserServiceInterface;
 
 class AdminController extends Controller
 {
+    public function __construct(
+        public UserRepositoryInterface $userRepository,
+        public UserServiceInterface    $userService,
+
+        public ComplaintRepositoryInterface $complaintRepository,
+    )
+    {
+    }
+
     /**
      * Банит или разбанивает пользователя
      *
      * @param string $id
      * @return UserResource
      */
-    public function changeBan(string $id) : UserResource
+    public function changeBan(string $id): UserResource
     {
-        $user = User::find($id);
+        $user = $this->userRepository->getUserById($id);
 
-        if ($user->banned == 0)
-        {
-            $user->banned = 1;
-        } else
-        {
-            $user->banned = 0;
-        }
+        $user->banned = !$user->banned;
         $user->save();
 
         return new UserResource($user);
@@ -41,13 +44,18 @@ class AdminController extends Controller
      *
      * @return UserCollection
      */
-    public function users() :UserCollection
+    public function users(): UserCollection
     {
-        return new UserCollection(User::paginate(10));
+        return new UserCollection($this->userRepository->getAllUsers());
     }
 
-    public function complaints()
+    /**
+     * Возвращает все жалобы
+     *
+     * @return ComplaintCollection
+     */
+    public function complaints(): ComplaintCollection
     {
-        return new ComplaintCollection(Complaint::paginate(10));
+        return new ComplaintCollection($this->complaintRepository->getAllComplaints());
     }
 }

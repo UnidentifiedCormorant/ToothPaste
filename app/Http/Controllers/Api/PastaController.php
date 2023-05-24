@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Domain\DTO\PastaData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PastaRequest;
 use App\Http\Resources\Pasta\PastaCollection;
@@ -10,6 +11,7 @@ use App\Jobs\HidePastaJob;
 use App\Models\Pasta;
 use App\Repositories\Interfaces\PastaRepositoryInterface;
 use App\Repositories\PastaEloquent;
+use App\Services\Interfaces\PastaServiceInterface;
 use App\Services\PastaService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,6 +24,13 @@ use Illuminate\View\View;
 
 class PastaController extends Controller
 {
+    public function __construct(
+        public PastaRepositoryInterface $pastaRepository,
+        public PastaServiceInterface $pastaService
+    )
+    {
+    }
+
     /**
      * Возвращает пасту по хэшу
      *
@@ -29,11 +38,9 @@ class PastaController extends Controller
      * @param PastaRepositoryInterface $repository
      * @return PastaResource
      */
-    public function show(string $hash, PastaRepositoryInterface $repository) : PastaResource
+    public function show(string $hash) : PastaResource
     {
-        $pasta = $repository->getPasta($hash);
-
-        $pasta->privateCheck();
+        $pasta = $this->pastaService->show($hash, Auth::user());
 
         return new PastaResource($pasta);
     }
@@ -45,31 +52,26 @@ class PastaController extends Controller
      */
     public function myPastas() : PastaCollection
     {
-        if (Auth::check())
-        {
-            return new PastaCollection(Auth::user()->pastas()->paginate(10));
-        }
-        else
-        {
-            abort(403);
-        }
+        $pastas = $this->pastaService->myPastas(Auth::user());
+
+        return new PastaCollection($pastas);
     }
 
     /**
-     * Добавляет объект в базу на осонове данных с фронта
+     * Добавляет объект в базу на основе данных с фронта
      *
      * @param PastaRequest $request
-     * @param PastaService $service
      * @return PastaResource
      */
-    public function store(PastaRequest $request, PastaService $service) : PastaResource
+    public function store(PastaRequest $request) : PastaResource
     {
-        $data = $request->validated();
+        $data = PastaData::create(
+            $request->validated()
+        );
 
-        $pasta = $service->store($data, $request['language']);
+        $pasta = $this->pastaService->store($data, Auth::user());
 
-        if ($request['expirationTime'] != null)
-        {
+        if ($data->expiration_time != null) {
             HidePastaJob::dispatch($pasta->id)->delay(now()->addMinutes($request['expirationTime']));
         }
 

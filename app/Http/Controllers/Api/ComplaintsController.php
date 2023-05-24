@@ -2,36 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Domain\DTO\ComplaintData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ComplaintRequest;
 use App\Http\Resources\Complaint\ComplaintResource;
-use App\Models\Complaint;
-use App\Models\Pasta;
-use App\Models\User;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use App\Repositories\Interfaces\ComplaintRepositoryInterface;
+use App\Services\Interfaces\ComplaintServiceInterface;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 
 class ComplaintsController extends Controller
 {
+    public function __construct(
+        public ComplaintRepositoryInterface $complaintRepository,
+        public ComplaintServiceInterface    $complaintService
+    )
+    {
+    }
+
     /**
      * Создаёт жалобу
      *
      * @param ComplaintRequest $request
      * @return ComplaintResource
      */
-    public function store(ComplaintRequest $request) : ComplaintResource
+    public function store(ComplaintRequest $request): ComplaintResource
     {
-        $data = $request->validated();
+        $data = ComplaintData::create(
+            $request->validated()
+        );
 
-        if(Auth::check())
-        {
-            $data['user_id'] = Auth::user()->id;
-        }
-
-        $complaint = Complaint::create($data);
+        $complaint = $this->complaintService->store($data, Auth::user());
 
         return new ComplaintResource($complaint);
     }

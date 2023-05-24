@@ -2,8 +2,12 @@
 
 namespace App\Http\Resources\Pasta;
 
+use App\Models\Pasta;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Pasta
+ */
 class PastaResource extends JsonResource
 {
     /**
@@ -14,6 +18,10 @@ class PastaResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'title' => $this->title,
+            'content' => $this->content,
+            'author' => $this->user_id ? $this->user->name : "Аноним",
+        ];
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\ComplaintEloquent;
+use App\Repositories\Interfaces\ComplaintRepositoryInterface;
 use App\Repositories\Interfaces\PastaRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\PastaEloquent;
@@ -12,7 +14,8 @@ class RepositoryServiceProvider extends ServiceProvider
 {
     public array $bindings = [
         PastaRepositoryInterface::class => PastaEloquent::class,
-        UserRepositoryInterface::class => UserEloquent::class
+        UserRepositoryInterface::class => UserEloquent::class,
+        ComplaintRepositoryInterface::class => ComplaintEloquent::class,
     ];
 
     public function register(): void

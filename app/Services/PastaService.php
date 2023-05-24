@@ -27,7 +27,6 @@ class PastaService implements PastaServiceInterface
      * @param mixed $data
      * @param User|null $user
      * @return Pasta
-     * @throws ValidatorException
      */
     public function store(PastaData $data, ?User $user): Pasta
     {
@@ -49,7 +48,7 @@ class PastaService implements PastaServiceInterface
      */
     public function show(string $hash, ?User $user): Pasta
     {
-        $pasta = $this->pastaRepository->getPasta($hash);
+        $pasta = $this->pastaRepository->getPastaByHash($hash);
 
         if ($pasta->access_type == 3) {
             if (!$user) {
@@ -62,6 +61,12 @@ class PastaService implements PastaServiceInterface
         return $pasta;
     }
 
+    /**
+     * Возвращает пасты авторизованного пользователя
+     *
+     * @param User|null $user
+     * @return LengthAwarePaginator
+     */
     public function myPastas(?User $user): LengthAwarePaginator
     {
         if($user) {
