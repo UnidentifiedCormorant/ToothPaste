@@ -5,8 +5,7 @@
 | [Текст задания](#text)                                                            | 
 | [Как развернуть](#how)                                                            | 
 | [НЕеализованный функционал](#real)                                                |
-| [Тестирование API через *Postman*](#postman)                                      | 
-| [Тестирование API через *Insomnia*](#insomnia)                                    | 
+| [Тестирование API в HTTP-клиентах (Postman, Insomnia)](#postman)                                      |                                   | 
 | [Несколько комментариев касательно кода и архитектуры](#comments)                 | 
 | [История о том, как один разработчик orchid к laravel 10 прикручивал](#coolStory) | 
 
@@ -105,9 +104,6 @@ php artisan migrate --seed   //накатываем миграции и запо
 "Authorization": "Bearer 3|6YdtE4YEPOp6id62VvFZY8GGCvvCNorVTjQjNtnY"
 ```
 Примечание: Этот функционал был протестирован только в Insomnia. Вы конечно можете попытаться в Postman, но лучше используйте Insomnia)
-
-<h2><a name="insomnia">Тестирование API через Insomnia</a></h2>
-Через 
 
 <h2><a name="comments">Несколько комментариев касательно кода и архитектуры</a></h2>
 
