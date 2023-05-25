@@ -25,10 +25,7 @@ class UserController extends Controller
      */
     public function changeBan(string $id) : RedirectResponse
     {
-        $user = $this->userRepository->getUserById($id);
-
-        $user->banned = !$user->banned;
-        $user->save();
+        $this->userRepository->changeBan($id);
 
         return redirect()->route('platform.systems.users');
     }

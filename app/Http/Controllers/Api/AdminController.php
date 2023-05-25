@@ -31,10 +31,7 @@ class AdminController extends Controller
      */
     public function changeBan(string $id): UserResource
     {
-        $user = $this->userRepository->getUserById($id);
-
-        $user->banned = !$user->banned;
-        $user->save();
+        $user = $this->userService->changeBan($id);
 
         return new UserResource($user);
     }

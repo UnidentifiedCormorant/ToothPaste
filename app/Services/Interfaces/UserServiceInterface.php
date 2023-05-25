@@ -13,4 +13,6 @@ interface UserServiceInterface
 
     public function attemptAuth(AuthData $data) : AuthEntity;
 
+    public function changeBan(string $id): User;
+
 }

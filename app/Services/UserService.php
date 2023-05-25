@@ -60,7 +60,12 @@ class UserService implements UserServiceInterface
         }
     }
 
-    protected function checkBan(User $user): bool{
-        return $user->banned;
+    public function changeBan(string $id): User{
+        $user = $this->userRepository->getUserById($id);
+
+        $user->banned = !$user->banned;
+        $user->save();
+
+        return $user;
     }
 }

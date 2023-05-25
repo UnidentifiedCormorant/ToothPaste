@@ -33,6 +33,11 @@ class UserEloquent extends BaseRepository implements UserRepositoryInterface
         ])->first();
     }
 
+    /**
+     * @param string $id
+     * @return User
+     * @throws RepositoryException
+     */
     public function getUserById(string $id): User
     {
         /** @var Builder $builder */
