@@ -7,6 +7,7 @@ use App\Models\Complaint;
 use App\Models\User;
 use App\Repositories\Interfaces\ComplaintRepositoryInterface;
 use App\Services\Interfaces\ComplaintServiceInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 class ComplaintService implements ComplaintServiceInterface
 {
@@ -23,5 +24,10 @@ class ComplaintService implements ComplaintServiceInterface
             'pasta_id' => $data->pasta_id,
             'user_id' => $user->id,
         ]);
+    }
+
+    public function getAllComplaints(): Collection
+    {
+        return $this->complaintRepository->getAllComplaints();
     }
 }

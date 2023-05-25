@@ -5,13 +5,12 @@ namespace App\Services;
 use App\Domain\DTO\PastaData;
 use App\Exceptions\AuthException;
 use App\Exceptions\NotFoundException;
+use App\Jobs\HidePastaJob;
 use App\Models\Pasta;
 use App\Models\User;
 use App\Repositories\Interfaces\PastaRepositoryInterface;
 use App\Services\Interfaces\PastaServiceInterface;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Prettus\Validator\Exceptions\ValidatorException;
 
 class PastaService implements PastaServiceInterface
 {
@@ -30,13 +29,19 @@ class PastaService implements PastaServiceInterface
      */
     public function store(PastaData $data, ?User $user): Pasta
     {
-        return $this->pastaRepository->create([
+        $pasta = $this->pastaRepository->create([
             'title' => $data->title,
             'content' => $data->content,
             'hash' => substr(md5(time() + rand(1, 10000)), 0, 16),
             'user_id' => ($user !== null) ? $user->id : null,
             'access_type' => $data->access_type->value
         ]);
+
+        if ($data->expiration_time != 0) {
+            HidePastaJob::dispatch($pasta->id)->delay(now()->addMinutes($data->expiration_time));
+        }
+
+        return $pasta;
     }
 
     /**
@@ -74,5 +79,16 @@ class PastaService implements PastaServiceInterface
         }else{
             throw new AuthException();
         }
+    }
+
+    /**
+     * Возвращает пасту по id
+     *
+     * @param string $pastaId
+     * @return Pasta
+     */
+    public function getPastaById(string $pastaId): Pasta
+    {
+        return $this->pastaRepository->getPastaById($pastaId);
     }
 }

@@ -3,27 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Domain\DTO\ComplaintData;
-use App\Domain\DTO\PastaData;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\ComplaintRequest;
-use App\Models\Complaint;
-use App\Models\Pasta;
 use App\Models\User;
-use App\Repositories\Interfaces\ComplaintRepositoryInterface;
-use App\Repositories\Interfaces\PastaRepositoryInterface;
 use App\Services\Interfaces\ComplaintServiceInterface;
 use App\Services\Interfaces\PastaServiceInterface;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\View\View;
 
 class ComplaintsController extends Controller
 {
     public function __construct(
-        public ComplaintRepositoryInterface $complaintRepository,
         public ComplaintServiceInterface $complaintService,
-        public PastaRepositoryInterface $pastaRepository,
+        public PastaServiceInterface $pastaService,
     )
     {
     }
@@ -36,7 +28,7 @@ class ComplaintsController extends Controller
      */
     public function create(string $pastaId) : View
     {
-        $pasta = $this->pastaRepository->getPastaById($pastaId);
+        $pasta = $this->pastaService->getPastaById($pastaId);
         return view('complaints.create', ['pasta' => $pasta]);
     }
 

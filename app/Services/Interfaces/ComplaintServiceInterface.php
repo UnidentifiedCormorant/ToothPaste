@@ -3,12 +3,13 @@
 namespace App\Services\Interfaces;
 
 use App\Domain\DTO\ComplaintData;
-use App\Domain\DTO\PastaData;
 use App\Models\Complaint;
-use App\Models\Pasta;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 
 interface ComplaintServiceInterface
 {
-    public function store(ComplaintData $data, User $user) : Complaint;
+    public function store(ComplaintData $data, User $user): Complaint;
+
+    public function getAllComplaints(): Collection;
 }

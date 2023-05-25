@@ -5,13 +5,12 @@ namespace App\Services;
 use App\Domain\DTO\AuthData;
 use App\Domain\DTO\UserData;
 use App\Domain\Entity\AuthEntity;
-use App\Exceptions\AuthException;
 use App\Exceptions\BanException;
-use App\Exceptions\NotFoundException;
 use App\Exceptions\WrongLoginOrPasswordException;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Services\Interfaces\UserServiceInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class UserService implements UserServiceInterface
@@ -60,6 +59,12 @@ class UserService implements UserServiceInterface
         }
     }
 
+    /**
+     * Меняет статус бана у пользователя на противоположный
+     *
+     * @param string $id
+     * @return User
+     */
     public function changeBan(string $id): User{
         $user = $this->userRepository->getUserById($id);
 
@@ -67,5 +72,15 @@ class UserService implements UserServiceInterface
         $user->save();
 
         return $user;
+    }
+
+    /**
+     * Возвращает всех пользователей
+     *
+     * @return Collection
+     */
+    public function getAllUsers(): Collection
+    {
+        return $this->userRepository->getAllUsers();
     }
 }

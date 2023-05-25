@@ -2,9 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Models\Pasta;
+use App\Repositories\Interfaces\PastaRepositoryInterface;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -14,7 +13,8 @@ class HidePastaJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private int $id;
+    private string $id;
+    private PastaRepositoryInterface $pastaRepository;
 
     /**
      * Create a new job instance.
@@ -29,6 +29,6 @@ class HidePastaJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Pasta::destroy($this->id);
+        $this->pastaRepository->softDeletePasta($this->id);
     }
 }

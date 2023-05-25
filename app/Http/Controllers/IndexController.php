@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\AccessType;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
-use phpDocumentor\Reflection\Types\Collection;
 
 class IndexController extends Controller
 {

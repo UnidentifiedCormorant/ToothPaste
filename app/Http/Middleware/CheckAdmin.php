@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\NotAdminException;
+use App\Exceptions\NotFoundException;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +19,6 @@ class CheckAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        return (Auth::check() && Auth::user()->hasAccess('*')) ? $next($request) : dd('not admin, sry');
+        return (Auth::check() && Auth::user()->hasAccess('*')) ? $next($request) : throw new NotAdminException();
     }
 }

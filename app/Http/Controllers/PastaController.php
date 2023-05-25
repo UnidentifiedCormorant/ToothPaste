@@ -4,19 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Domain\DTO\PastaData;
 use App\Http\Requests\PastaRequest;
-use App\Jobs\HidePastaJob;
 use App\Models\User;
-use App\Repositories\Interfaces\PastaRepositoryInterface;
 use App\Services\Interfaces\PastaServiceInterface;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Contracts\View\View;
 
 class PastaController extends Controller
 {
 
-    public function __construct(public PastaRepositoryInterface $pastaRepository,
-                                public PastaServiceInterface    $pastaService)
+    public function __construct(
+        public PastaServiceInterface $pastaService
+    )
     {
     }
 
@@ -64,10 +63,6 @@ class PastaController extends Controller
         /** @var User $user */
         $user = Auth::user();
         $pasta = $this->pastaService->store($data, $user);
-
-        if ($data->expiration_time != null) {
-            HidePastaJob::dispatch($pasta->id)->delay(now()->addMinutes($request['expirationTime']));
-        }
 
         return redirect()->route('show', $pasta->hash);
     }

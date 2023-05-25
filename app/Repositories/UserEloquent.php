@@ -2,14 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Domain\DTO\AuthData;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Exceptions\RepositoryException;
-use function PHPUnit\Framework\returnArgument;
 
 class UserEloquent extends BaseRepository implements UserRepositoryInterface
 {

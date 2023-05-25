@@ -6,19 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Complaint\ComplaintCollection;
 use App\Http\Resources\User\UserCollection;
 use App\Http\Resources\User\UserResource;
-use App\Models\Complaint;
-use App\Models\User;
-use App\Repositories\Interfaces\ComplaintRepositoryInterface;
-use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Services\Interfaces\ComplaintServiceInterface;
 use App\Services\Interfaces\UserServiceInterface;
 
 class AdminController extends Controller
 {
     public function __construct(
-        public UserRepositoryInterface $userRepository,
         public UserServiceInterface    $userService,
-
-        public ComplaintRepositoryInterface $complaintRepository,
+        public ComplaintServiceInterface $complaintService
     )
     {
     }
@@ -43,7 +38,7 @@ class AdminController extends Controller
      */
     public function users(): UserCollection
     {
-        return new UserCollection($this->userRepository->getAllUsers());
+        return new UserCollection($this->userService->getAllUsers());
     }
 
     /**
@@ -53,6 +48,6 @@ class AdminController extends Controller
      */
     public function complaints(): ComplaintCollection
     {
-        return new ComplaintCollection($this->complaintRepository->getAllComplaints());
+        return new ComplaintCollection($this->complaintService->getAllComplaints());
     }
 }

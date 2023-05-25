@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Models\Pasta;
 use App\Models\User;
 use App\Repositories\Interfaces\PastaRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Prettus\Repository\Eloquent\BaseRepository;
@@ -57,5 +56,11 @@ class PastaEloquent extends BaseRepository implements PastaRepositoryInterface
         $builder = $this->makeModel();
 
         return $builder->find($id);
+    }
+
+    public function softDeletePasta(string $id): void
+    {
+        $builder = $this->makeModel();
+        $builder->destroy($id);
     }
 }

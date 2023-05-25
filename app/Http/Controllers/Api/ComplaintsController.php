@@ -7,14 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ComplaintRequest;
 use App\Http\Resources\Complaint\ComplaintResource;
 use App\Models\User;
-use App\Repositories\Interfaces\ComplaintRepositoryInterface;
 use App\Services\Interfaces\ComplaintServiceInterface;
 use Illuminate\Support\Facades\Auth;
 
 class ComplaintsController extends Controller
 {
     public function __construct(
-        public ComplaintRepositoryInterface $complaintRepository,
         public ComplaintServiceInterface    $complaintService
     )
     {

@@ -6,9 +6,7 @@ use App\Domain\DTO\AuthData;
 use App\Domain\DTO\UserData;
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Services\Interfaces\UserServiceInterface;
-use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\View\View;
@@ -17,7 +15,6 @@ class AuthController extends Controller
 {
     public function __construct(
         public UserServiceInterface    $userService,
-        public UserRepositoryInterface $userRepository
     )
     {
     }
