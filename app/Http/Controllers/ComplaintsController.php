@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ComplaintRequest;
 use App\Models\Complaint;
 use App\Models\Pasta;
+use App\Models\User;
 use App\Repositories\Interfaces\ComplaintRepositoryInterface;
 use App\Repositories\Interfaces\PastaRepositoryInterface;
 use App\Services\Interfaces\ComplaintServiceInterface;
@@ -15,7 +16,7 @@ use App\Services\Interfaces\PastaServiceInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class ComplaintsController extends Controller
 {
@@ -51,7 +52,9 @@ class ComplaintsController extends Controller
             $request->validated()
         );
 
-        $this->complaintService->store($data, Auth::user());
+        /** @var User $user */
+        $user = Auth::user();
+        $this->complaintService->store($data, $user);
 
         return redirect(route('pastas.index'));
     }

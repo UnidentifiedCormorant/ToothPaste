@@ -8,6 +8,7 @@ use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
 use Prettus\Repository\Eloquent\BaseRepository;
+use Prettus\Repository\Exceptions\RepositoryException;
 use function PHPUnit\Framework\returnArgument;
 
 class UserEloquent extends BaseRepository implements UserRepositoryInterface
@@ -18,9 +19,9 @@ class UserEloquent extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param string $data
-     * @return User
-     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     * @param string $email
+     * @return User|null
+     * @throws RepositoryException
      */
     public function getUserByEmail(string $email): User|null
     {
@@ -41,8 +42,7 @@ class UserEloquent extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
-     * @return Collection
-     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     * @inheritDoc
      */
     public function getAllUsers(): Collection
     {

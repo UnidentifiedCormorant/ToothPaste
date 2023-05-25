@@ -11,7 +11,7 @@ use App\Services\Interfaces\UserServiceInterface;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class AuthController extends Controller
 {
@@ -53,7 +53,6 @@ class AuthController extends Controller
      * Создаёт нового пользователя
      *
      * @param RegisterRequest $request
-     * @param UserService $service
      * @return RedirectResponse
      */
     public function newUser(RegisterRequest $request): RedirectResponse

@@ -15,5 +15,8 @@ interface UserRepositoryInterface extends RepositoryInterface
 
     public function getUserById(string $id): User;
 
+    /**
+     * @return Collection
+     */
     public function getAllUsers(): Collection;
 }

@@ -9,6 +9,7 @@ use App\Http\Resources\Pasta\PastaCollection;
 use App\Http\Resources\Pasta\PastaResource;
 use App\Jobs\HidePastaJob;
 use App\Models\Pasta;
+use App\Models\User;
 use App\Repositories\Interfaces\PastaRepositoryInterface;
 use App\Repositories\PastaEloquent;
 use App\Services\Interfaces\PastaServiceInterface;
@@ -35,12 +36,13 @@ class PastaController extends Controller
      * Возвращает пасту по хэшу
      *
      * @param string $hash
-     * @param PastaRepositoryInterface $repository
      * @return PastaResource
      */
-    public function show(string $hash) : PastaResource
+    public function show(string $hash): PastaResource
     {
-        $pasta = $this->pastaService->show($hash, Auth::user());
+        /** @var User $user */
+        $user = Auth::user();
+        $pasta = $this->pastaService->show($hash, $user);
 
         return new PastaResource($pasta);
     }
@@ -50,9 +52,11 @@ class PastaController extends Controller
      *
      * @return PastaCollection
      */
-    public function myPastas() : PastaCollection
+    public function myPastas(): PastaCollection
     {
-        $pastas = $this->pastaService->myPastas(Auth::user());
+        /** @var User $user */
+        $user = Auth::user();
+        $pastas = $this->pastaService->myPastas($user);
 
         return new PastaCollection($pastas);
     }
@@ -63,13 +67,15 @@ class PastaController extends Controller
      * @param PastaRequest $request
      * @return PastaResource
      */
-    public function store(PastaRequest $request) : PastaResource
+    public function store(PastaRequest $request): PastaResource
     {
         $data = PastaData::create(
             $request->validated()
         );
 
-        $pasta = $this->pastaService->store($data, Auth::user());
+        /** @var User $user */
+        $user = Auth::user();
+        $pasta = $this->pastaService->store($data, $user);
 
         if ($data->expiration_time != null) {
             HidePastaJob::dispatch($pasta->id)->delay(now()->addMinutes($request['expirationTime']));

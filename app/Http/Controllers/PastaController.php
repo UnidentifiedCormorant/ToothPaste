@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Domain\DTO\PastaData;
 use App\Http\Requests\PastaRequest;
 use App\Jobs\HidePastaJob;
+use App\Models\User;
 use App\Repositories\Interfaces\PastaRepositoryInterface;
 use App\Services\Interfaces\PastaServiceInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class PastaController extends Controller
 {
@@ -20,12 +21,16 @@ class PastaController extends Controller
     }
 
     /**
+     * Возвращает пасту по хэшу
+     *
      * @param string $hash
      * @return View
      */
     public function show(string $hash): View
     {
-        $pasta = $this->pastaService->show($hash, Auth::user());
+        /** @var User $user */
+        $user = Auth::user();
+        $pasta = $this->pastaService->show($hash, $user);
 
         return view('pastas.show', ['pasta' => $pasta]);
     }
@@ -33,11 +38,13 @@ class PastaController extends Controller
     /**
      * Возвращает все пасты авторизованного пользователя
      *
-     * @return View|\Illuminate\Foundation\Application|void
+     * @return View
      */
-    public function myPastas()
+    public function myPastas(): View
     {
-        $pastas = $this->pastaService->myPastas(Auth::user());
+        /** @var User $user */
+        $user = Auth::user();
+        $pastas = $this->pastaService->myPastas($user);
 
         return view('pastas.myPastas', ['pastas' => $pastas]);
     }
@@ -54,7 +61,9 @@ class PastaController extends Controller
             $request->validated()
         );
 
-        $pasta = $this->pastaService->store($data, Auth::user());
+        /** @var User $user */
+        $user = Auth::user();
+        $pasta = $this->pastaService->store($data, $user);
 
         if ($data->expiration_time != null) {
             HidePastaJob::dispatch($pasta->id)->delay(now()->addMinutes($request['expirationTime']));

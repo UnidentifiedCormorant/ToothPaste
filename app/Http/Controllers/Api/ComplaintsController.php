@@ -6,6 +6,7 @@ use App\Domain\DTO\ComplaintData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ComplaintRequest;
 use App\Http\Resources\Complaint\ComplaintResource;
+use App\Models\User;
 use App\Repositories\Interfaces\ComplaintRepositoryInterface;
 use App\Services\Interfaces\ComplaintServiceInterface;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +32,10 @@ class ComplaintsController extends Controller
             $request->validated()
         );
 
-        $complaint = $this->complaintService->store($data, Auth::user());
+        /** @var User $user */
+        $user = Auth::user();
+
+        $complaint = $this->complaintService->store($data, $user);
 
         return new ComplaintResource($complaint);
     }
