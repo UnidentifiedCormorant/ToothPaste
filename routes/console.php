@@ -15,6 +15,5 @@ use Illuminate\Support\Facades\Artisan;
 */
 
 Artisan::command('debug', function () {
-    $user = \App\Models\User::first();
-    dd(is_bool($user->banned));
+    dd(route('platform.index'));
 });
