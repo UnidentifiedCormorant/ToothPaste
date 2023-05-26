@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Complaint\ComplaintCollection;
+use App\Http\Resources\Complaint\ComplaintResource;
 use App\Http\Resources\User\UserCollection;
 use App\Http\Resources\User\UserResource;
 use App\Services\Interfaces\ComplaintServiceInterface;
 use App\Services\Interfaces\UserServiceInterface;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class AdminController extends Controller
 {
@@ -34,20 +37,20 @@ class AdminController extends Controller
     /**
      * Возвращает всех пользователей
      *
-     * @return UserCollection
+     * @return UserResource
      */
-    public function users(): UserCollection
+    public function users(): JsonResource
     {
-        return new UserCollection($this->userService->getAllUsers());
+        return UserResource::collection($this->userService->getAllUsers());
     }
 
     /**
      * Возвращает все жалобы
      *
-     * @return ComplaintCollection
+     * @return JsonResource
      */
-    public function complaints(): ComplaintCollection
+    public function complaints(): JsonResource
     {
-        return new ComplaintCollection($this->complaintService->getAllComplaints());
+        return ComplaintResource::collection($this->complaintService->getAllComplaints());
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Pasta;
 
+use App\Domain\Enum\AccessType;
 use App\Models\Pasta;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,6 +23,7 @@ class PastaResource extends JsonResource
             'title' => $this->title,
             'content' => $this->content,
             'author' => $this->user_id ? $this->user->name : "Аноним",
+            'access_type' => AccessType::from($this->access_type)->title()
         ];
     }
 }

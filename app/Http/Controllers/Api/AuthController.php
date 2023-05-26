@@ -40,9 +40,9 @@ class AuthController extends Controller
      * Создаёт нового пользователя
      *
      * @param RegisterRequest $request
-     * @return UserResource
+     * @return AuthResource
      */
-    public function newUser(RegisterRequest $request): UserResource
+    public function newUser(RegisterRequest $request): AuthResource
     {
         $data = UserData::create(
             $request->validated()
@@ -50,9 +50,7 @@ class AuthController extends Controller
 
         $user = $this->userService->store($data);
 
-        Auth::login($user);
-
-        return new UserResource($user);
+        return new AuthResource($user);
     }
 
     /**

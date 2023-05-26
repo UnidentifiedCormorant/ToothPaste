@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Domain\DTO\PastaData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PastaRequest;
-use App\Http\Resources\Pasta\PastaCollection;
 use App\Http\Resources\Pasta\PastaResource;
 use App\Models\User;
 use App\Services\Interfaces\PastaServiceInterface;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
 class PastaController extends Controller
@@ -37,15 +37,15 @@ class PastaController extends Controller
     /**
      * Возвращает все пасты авторизованного пользователя
      *
-     * @return PastaCollection
+     * @return PastaResource
      */
-    public function myPastas(): PastaCollection
+    public function myPastas(): JsonResource
     {
         /** @var User $user */
         $user = Auth::user();
         $pastas = $this->pastaService->myPastas($user);
 
-        return new PastaCollection($pastas);
+        return PastaResource::collection($pastas);
     }
 
     /**

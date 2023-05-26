@@ -25,13 +25,18 @@ class UserService implements UserServiceInterface
      * @param mixed $data
      * @return User
      */
-    public function store(UserData $data): User
+    public function store(UserData $data): AuthEntity
     {
-        return $this->userRepository->create([
+        $user = $this->userRepository->create([
             'name' => $data->name,
             'email' => $data->email,
             'password' => \Hash::make($data->password)
         ]);
+
+        Auth::login($user);
+        $token = $user->createToken(config('app.name'));
+
+        return new AuthEntity($user, $token->plainTextToken);
     }
 
     /**

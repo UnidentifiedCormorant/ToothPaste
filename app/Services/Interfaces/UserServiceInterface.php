@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface UserServiceInterface
 {
-    public function store(UserData $data): User;
+    public function store(UserData $data): AuthEntity;
 
     public function attemptAuth(AuthData $data): AuthEntity;
 

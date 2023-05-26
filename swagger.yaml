@@ -1,0 +1,392 @@
+openapi: 3.0.3
+info:
+  title: TooshPaste - api
+  description: Для любителей - паста с макаронами, для ценителей - паста из зубов
+  version: 1.0.
+
+servers:
+  - url: https://pasta.test/api
+    description: Это база
+tags:
+  - name: Авторизация
+    description: Всякие входы и выходы из приложения, полезно для зубов
+
+  - name: Пасты
+    description: Всякое для работы с пастами, и даже зубная щётка не понадобится
+
+  - name: Жалобы
+    description: Функционал для работы с жалобами, для людей с больными зубами
+
+  - name: Администратор
+    description: Функционал, доступный только администратору
+
+
+paths:
+  /logout:
+    get:
+      tags:
+        - Авторизация
+      summary: Выйти из приложения
+      description: Выйти из приложения и больше здесь не показываться
+      responses:
+        '200':
+          description: You logouted
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LogoutedResponse'
+
+
+  /auth:
+    post:
+      tags:
+        - Авторизация
+      summary: Войти в приложение
+      description: Войти в приложение прямо как в рот входит... зубная щётка.
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+
+      responses:
+        200:
+          description: Авторизация прошла без вазелина
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        400:
+          description: Неверный логин или пароль
+        404:
+          description: Вы забанены
+
+
+  /newUser:
+    post:
+      tags:
+        - Авторизация
+      summary: Регистрируется новый пользователь
+      description: Регистрируется новый пользователь
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUserRequest'
+
+      responses:
+        200:
+          description: Регистрация прошла без вазелина
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+
+
+  /myPastas:
+    get:
+      tags:
+        - Пасты
+      summary: Получить пасты авторизованного пользователя
+      description: Получить пасты авторизованного пользователя
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Пасты получены
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PastaResponse'
+        401:
+          description: Вы не авторизованы
+
+
+  /{hash}:
+    get:
+      tags:
+        - Пасты
+      summary: Получить пасту по хэшу
+      description: Ошибка может выскочить только в том случае, если к protected пасте постучался пользователь, который её НЕ создавал
+      parameters:
+        - name: hash
+          in: path
+          description: Уникальный ключ к пасте, но не id, id не безопасно
+          required: true
+          schema:
+            type: string
+
+      responses:
+        200:
+          description: Паста получена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PastaResponse'
+        403:
+          description: Вы не авторизованы
+        500:
+          description: Ничего нет
+
+
+  /:
+    post:
+      tags:
+        - Пасты
+      summary: Добавление пасты в базу
+      description: Добавление пасты в базу
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PastaRequest'
+
+      responses:
+        200:
+          description: Паста успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PastaResponse'
+
+
+  /complaints/store:
+    post:
+      tags:
+        - Жалобы
+      summary: Добавление жалобы
+      description: Добавление жалобы
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComplaintRequest'
+
+      responses:
+        200:
+          description: Создана жалоба
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplaintResponse'
+
+
+  /admin/users:
+    get:
+      tags:
+        - Администратор
+      summary: Получить всех пользователей
+      description: Получить всех пользователей
+
+      security:
+        - bearerAuth: []
+
+      responses:
+        200:
+          description: Вот вам все пользователи
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        404:
+          description: Вы не авторизованы
+
+
+  /admin/complaints:
+    get:
+      tags:
+        - Администратор
+      summary: Получить все жалобы
+      description: Получить все жалобы
+
+      security:
+        - bearerAuth: [ ]
+
+      responses:
+        200:
+          description: Вот вам все жалобы
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplaintResponse'
+        401:
+          description: Вы не авторизованы
+
+
+  /admin/changeBan/{id}:
+    get:
+      tags:
+        - Администратор
+      summary: Поменять статус пользователя на противоположный
+      description: Поменять статус пользователя на противоположный
+      parameters:
+        - name: id
+          in: path
+          description: Уникальный идентификатор пользователя
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Теперь его жизнь изменится...
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        401:
+          description: Вы не авторизованы
+
+
+components:
+  schemas:
+    AuthRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          description: Мыло пользователя
+        password:
+          type: string
+          description: Пароль
+
+    NewUserRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+        - password_confirmation
+      properties:
+        name:
+          type: string
+          example: Lullen Lullenium
+        email:
+          type: string
+          example: ullulenium@6969.com
+        password:
+          type: string
+          example: 123
+        password_confirmation:
+          type: string
+          example: 123
+
+    PastaRequest:
+      type: object
+      required:
+        - title
+        - content
+        - expiration_time
+        - access_type
+        - language
+      properties:
+        title:
+          type: string
+          example: Я гений
+        content:
+          type: string
+          example: Я уже говорил, что я гений?
+        expiration_time:
+          type: string
+          enum:
+            - 0
+            - 10
+            - 60
+            - 180
+            - 1440
+            - 10080
+            - 43200
+        access_type:
+          type: string
+          enum:
+            - 1
+            - 2
+            - 3
+        language:
+          type: string
+          enum:
+            - ru
+            - en
+
+    ComplaintRequest:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          example: Я устал
+
+    UserResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Lullen Lullenium
+        banned:
+          type: boolean
+          example: 0
+
+    PastaResponse:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Как я Swagger описывал
+        author:
+          type: string
+          example: Ulullenium Great
+          description: Если пасту создал неавторизованный пользователь, вместо имени будет Аноним
+        access_type:
+          type: string
+          description: Доступ к пасте
+          enum:
+            - 1
+            - 2
+            - 3
+
+    ComplaintResponse:
+      type: object
+      properties:
+        content:
+          type: string
+          example: Почему у меня 32 зуба
+        user:
+          $ref: '#/components/schemas/UserResponse'
+        pasta:
+          $ref: '#/components/schemas/PastaResponse'
+
+    AuthResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Lullen Lullenium
+        banned:
+          type: boolean
+          example: 0
+        token:
+          type: string
+          example: 4|YLyBdFp0xkQQXEiWvMddxszCfhhuueuohyA4nt5d
+
+    LogoutedResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: You logouted
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+

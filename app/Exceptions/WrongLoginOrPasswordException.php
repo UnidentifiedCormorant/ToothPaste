@@ -6,6 +6,6 @@ use Exception;
 
 class WrongLoginOrPasswordException extends AppHttpException
 {
-    protected $code = '404';
+    protected $code = '400';
     protected $message = 'Неверный логин или пароль';
 }

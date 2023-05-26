@@ -14,7 +14,6 @@ class HidePastaJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private string $id;
-    private PastaRepositoryInterface $pastaRepository;
 
     /**
      * Create a new job instance.
@@ -27,8 +26,8 @@ class HidePastaJob implements ShouldQueue
     /**
      * Осуществляет мягкое удаление пасты
      */
-    public function handle(): void
+    public function handle(PastaRepositoryInterface $pastaRepository): void
     {
-        $this->pastaRepository->softDeletePasta($this->id);
+        $pastaRepository->softDeletePasta($this->id);
     }
 }

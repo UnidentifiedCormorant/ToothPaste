@@ -8,6 +8,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class AuthException extends AppHttpException
 {
-    protected $code = '404';
+    protected $code = '401';
     protected $message = "Вы не авторизованы";
 }
